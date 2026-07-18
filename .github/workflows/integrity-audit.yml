@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   audit:
@@ -33,3 +34,12 @@ jobs:
         run: touch v15_seven_day_robustness/V15_EXECUTION.log
 
       - run: make audit-v15
+
+      - name: Print LaTeX log warnings on failure
+        if: failure()
+        run: |
+          if [ -f manuscript/FutureInternet_manuscript_submission_v15.log ]; then
+            grep -i "overfull" manuscript/FutureInternet_manuscript_submission_v15.log || true
+          else
+            echo "LaTeX log file not found."
+          fi
