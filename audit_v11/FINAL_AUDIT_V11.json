@@ -264,7 +264,7 @@
     {
       "name": "all Python files compile",
       "status": "PASS",
-      "detail": "34 files; errors=[]"
+      "detail": "36 files; errors=[]"
     },
     {
       "name": "manuscript PDF exists",
@@ -290,7 +290,7 @@
     "dr_noninferiority_certified_runs": 50,
     "gp_noninferiority_certified_runs": 33,
     "trace_work_reduction": 0.8395061728395061,
-    "manuscript_sha256": "ff323c40a49e1edd41aa59d5fdc7a1dd85274e801c454fede38fd4abbffed5d5",
+    "manuscript_sha256": "fb24480a9393926368a80aff4f4db8b92a366b46d428b6a5600384a457b87148",
     "pdf_sha256": "f3933914807ed226d1bbc30027d018af3da9fe5755a562213478b8623ea00989"
   }
 }

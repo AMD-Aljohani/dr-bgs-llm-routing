@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import hashlib, json, math, py_compile, re, subprocess
+import argparse, hashlib, json, math, py_compile, re, subprocess
 from pathlib import Path
 import numpy as np
 import pandas as pd
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--verify-only', action='store_true')
+args = parser.parse_args()
 
 ROOT=Path(__file__).resolve().parents[1]
 MAN=ROOT/'manuscript'/'FutureInternet_manuscript_submission_v11.tex'
@@ -125,7 +129,10 @@ out={'status':status,'checks':checks,'summary':{
  'trace_work_reduction':reduction,
  'manuscript_sha256':sha(MAN),'pdf_sha256':sha(PDF) if PDF.exists() else None,
 }}
-(ROOT/'audit_v11/FINAL_AUDIT_V11.json').write_text(json.dumps(out,indent=2))
+if not args.verify_only:
+    with (ROOT/'audit_v11/FINAL_AUDIT_V11.json').open("w", encoding="utf-8", newline="\n") as f:
+        json.dump(out, f, indent=2)
+        f.write("\n")
 lines=['# V11 Final Validity and Claims Audit','',f'**Status: {status}**','',
        '## Headline findings','',
        f'- {out["summary"]["checks_passed"]}/{out["summary"]["checks_total"]} automated checks passed.',
@@ -142,5 +149,7 @@ lines=['# V11 Final Validity and Claims Audit','',f'**Status: {status}**','',
        '- The follow-up was designed after the strict result and is not described as external confirmation.',
        '', '## Automated checks','']
 for c in checks: lines.append(f'- **{c["status"]}** — {c["name"]}: {c["detail"]}')
-(ROOT/'audit_v11/FINAL_AUDIT_REPORT_V11.md').write_text('\n'.join(lines)+'\n')
+if not args.verify_only:
+    with (ROOT/'audit_v11/FINAL_AUDIT_REPORT_V11.md').open("w", encoding="utf-8", newline="\n") as f:
+        f.write('\n'.join(lines) + '\n')
 print(status, out['summary'])

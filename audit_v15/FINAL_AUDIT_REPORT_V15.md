@@ -1,10 +1,10 @@
 # V15 Integrated Validity and Package Audit
 
-**Status: FAIL. 60/61 checks passed.**
+**Status: FAIL. 61/65 checks passed.**
 
 ## Scope
 
-This audit preserves the V14 hierarchy and verifies the separately locked seven-day BurstGPT robustness replication, trace provenance, numerical claims, manuscript compliance, compilation, and PDF preflight.
+This audit preserves the V11 hierarchy and verifies the separately locked seven-day BurstGPT robustness replication, trace provenance, numerical claims, manuscript compliance, compilation, and PDF preflight.
 
 ## Key verified results
 
@@ -20,15 +20,19 @@ This audit preserves the V14 hierarchy and verifies the separately locked seven-
 
 ## Checks
 
-- PASS - v14_audit_passes
-- PASS - lock_v15_seven_day_robustness_v15_seven_day_protocol_md
-- PASS - lock_v15_seven_day_robustness_v15_seven_day_config_json
-- PASS - lock_trace_data_burstgpt_first7days_csv
-- PASS - lock_trace_data_burstgpt_provenance_v15_json
+- PASS - v11_audit_passes
+- PASS - checksum_manifest_integrity
+- PASS - lock_schema_validity
+- PASS - lock_timestamp_validity
+- PASS - lock_v15_seven_day_robustness_V15_SEVEN_DAY_PROTOCOL_md
+- PASS - lock_v15_seven_day_robustness_V15_SEVEN_DAY_CONFIG_json
+- PASS - lock_trace_data_BurstGPT_first7days_csv
+- PASS - lock_trace_data_BURSTGPT_PROVENANCE_V15_json
 - PASS - lock_v11_code_run_trace_risk_study_py
 - PASS - lock_code_run_smpt_campaign_py
 - PASS - lock_v15_seven_day_robustness_run_v15_seven_day_robustness_py
-- PASS - lock_precedes_execution
+- PASS - required_final_artifact_integrity
+- PASS - immutable_provenance_integrity
 - PASS - official_source_rows
 - PASS - official_source_hash_recorded
 - PASS - seven_day_hash
@@ -76,23 +80,28 @@ This audit preserves the V14 hierarchy and verifies the separately locked seven-
 - FAIL - latex_compiles
 - PASS - latex_no_undefined_references
 - PASS - latex_no_overfull_boxes
-- PASS - candidate_pdf_present
-- PASS - pdf_pages_reasonable
-- PASS - pdf_fonts_embedded
+- FAIL - candidate_pdf_present
+- FAIL - pdf_pages_reasonable
+- FAIL - pdf_fonts_embedded
 - PASS - cover_letter_one_page
 - PASS - v15_figure_present
 
 ## Notes
 
-- v14_audit_passes: PASS {'checks_total': 56, 'checks_passed': 56, 'checks_failed': 0, 'strict_absolute_certified_runs': 0, 'dr_noninferiority_certified_runs': 50, 'gp_noninferiority_certified_runs': 33, 'trace_work_reduction': 0.8395061728395061, 'manuscript_sha256': 'ff323c40a49e1edd41aa59d5fdc7a1dd85274e801c454fede38fd4abbffed5d5', 'pdf_sha256': 'f3933914807ed226d1bbc30027d018af3da9fe5755a562213478b8623ea00989'}
+- v11_audit_passes: PASS {'checks_total': 56, 'checks_passed': 56, 'checks_failed': 0, 'strict_absolute_certified_runs': 0, 'dr_noninferiority_certified_runs': 50, 'gp_noninferiority_certified_runs': 33, 'trace_work_reduction': 0.8395061728395061, 'manuscript_sha256': 'fb24480a9393926368a80aff4f4db8b92a366b46d428b6a5600384a457b87148', 'pdf_sha256': 'f3933914807ed226d1bbc30027d018af3da9fe5755a562213478b8623ea00989'}
 
-- lock_v15_seven_day_robustness_v15_seven_day_protocol_md: v15_seven_day_robustness/V15_SEVEN_DAY_PROTOCOL.md
-- lock_v15_seven_day_robustness_v15_seven_day_config_json: v15_seven_day_robustness/V15_SEVEN_DAY_CONFIG.json
-- lock_trace_data_burstgpt_first7days_csv: trace_data/BurstGPT_first7days.csv
-- lock_trace_data_burstgpt_provenance_v15_json: trace_data/BURSTGPT_PROVENANCE_V15.json
-- lock_v11_code_run_trace_risk_study_py: v11_code/run_trace_risk_study.py
-- lock_code_run_smpt_campaign_py: code/run_smpt_campaign.py
-- lock_v15_seven_day_robustness_run_v15_seven_day_robustness_py: v15_seven_day_robustness/run_v15_seven_day_robustness.py
+- checksum_manifest_integrity: Parsed SHA256SUMS.txt
+- lock_schema_validity: Parsed lock JSON
+- lock_timestamp_validity: 2026-07-18T06:02:07.316977+00:00
+- lock_v15_seven_day_robustness_V15_SEVEN_DAY_PROTOCOL_md: Verified
+- lock_v15_seven_day_robustness_V15_SEVEN_DAY_CONFIG_json: Verified
+- lock_trace_data_BurstGPT_first7days_csv: Verified
+- lock_trace_data_BURSTGPT_PROVENANCE_V15_json: Verified
+- lock_v11_code_run_trace_risk_study_py: Verified
+- lock_code_run_smpt_campaign_py: Verified
+- lock_v15_seven_day_robustness_run_v15_seven_day_robustness_py: Verified
+- required_final_artifact_integrity: All post-result artifacts verified
+- immutable_provenance_integrity: Aggregate of inputs and final artifacts
 - abstract_at_most_200: words=191
 - claim_first_100_chronological_rows_of_the_official: first 100 chronological rows of the official
 - claim_11_810_search_and_6_086_later_certification_records: 11,810 search and 6,086 later certification records
@@ -105,19 +114,16 @@ This audit preserves the V14 hierarchy and verifies the separately locked seven-
 - claim_informed_consent_statement: Informed Consent Statement
 - claim_data_availability_statement: Data Availability Statement
 - claim_conflicts_of_interest: Conflicts of Interest
-- latex_compiles: 
-Sorry, but latexmk did not succeed for the following reason:
+- latex_compiles: may duplicate other messages):
+  pdflatex: Command for 'pdflatex' gave return code 1
+      Refer to 'FutureInternet_manuscript_submission_v15.log' and/or above output for details
 
-  MiKTeX could not find the script engine 'perl' which is required to execute 'latexmk'.
+Latexmk: Sometimes, the -f option can be used to get latexmk
+  to try to force complete processing.
+  But normally, you will need to correct the file(s) that caused the
+  error, and then rerun latexmk.
+  In some cases, it is best to clean out generated files before rerunning
+  latexmk after you've corrected the files.
 
-Remedy:
-
-  Make sure 'perl' is installed on your system.
-
-The log file hopefully contains the information to get MiKTeX going again:
-
-  C:\Users\pc2\AppData\Local\MiKTeX\miktex\log\latexmk.log
-
-For more information, visit: https://miktex.org/kb/fix-script-engine-not-found
-
-- pdf_pages_reasonable: pages=37
+- candidate_pdf_present: BLOCKED by latex_compiles: no PDF was produced after compilation failed
+- pdf_pages_reasonable: pages=0

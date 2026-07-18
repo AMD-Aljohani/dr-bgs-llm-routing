@@ -109,9 +109,7 @@ python -m pip install -r requirements.txt
 make audit-v15
 ```
 
-The V15 audit preserves the V14 audit, verifies the seven-day trace provenance and locked V15 results, reruns the V11 integrity checks, verifies V12/V13 key-result files,
-checks numerical claims in the manuscript, compiles Python sources and LaTeX,
-and validates the release manifest.
+The V15 audit preserves the original V11 audit hierarchy. As part of the Branch B implementation, the previous filesystem timestamp (mtime) chronology workaround has been removed due to its inherent limitations on Windows/CI environments. The audit now enforces cryptographic immutable provenance by explicitly validating the `V15_PRE_RESULT_LOCK.json` timestamp and ensuring the tracked lock files rigidly match the holistic `SHA256SUMS.txt` cryptographic manifest. It additionally verifies the seven-day trace provenance and locked V15 results, reruns the V11 integrity checks, verifies V12/V13 key-result files, checks numerical claims in the manuscript, compiles Python sources and LaTeX, and validates the release manifest. Note that active 'V14' logic dependencies have been fully removed and reverted to their true 'V11' source layer.
 
 ## Directory guide
 

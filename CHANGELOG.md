@@ -20,7 +20,7 @@
 - Replaced duplicated-label reliability language with duplicate-aware counts.
 - Added V12/V13 protocols, scripts, locks, amendment record, raw results, checksums, and audits.
 - Updated the manuscript, cover letter, highlights, special-issue abstract, README, and release documentation.
-- Added an integrated V14 numerical-claim and package audit.
+- Added an integrated V11 numerical-claim and package audit.
 
 ## 1.3.0 - 2026-07-18
 

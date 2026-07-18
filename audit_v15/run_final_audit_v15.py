@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import py_compile
 import re
 import subprocess
 import sys
+import tempfile
+import shutil
 from pathlib import Path
+
+from check_immutable_provenance import verify_immutable_provenance, ProvenanceError
 
 import pandas as pd
 
@@ -20,6 +25,10 @@ V15 = ROOT / 'v15_seven_day_robustness'
 checks: dict[str, bool] = {}
 notes: list[str] = []
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--verify-only', action='store_true')
+args = parser.parse_args()
 
 def check(name: str, condition: bool, note: str = '') -> None:
     checks[name] = bool(condition)
@@ -44,17 +53,16 @@ if not v11_tex.exists() and v15_tex.exists():
 if not v11_pdf.exists() and v15_pdf.exists():
     v11_pdf.write_bytes(v15_pdf.read_bytes())
 
-proc = subprocess.run([sys.executable, str(ROOT / 'audit_v11' / 'run_final_audit_v11.py')], cwd=ROOT,
-                      text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-check('v14_audit_passes', proc.returncode == 0, proc.stdout[-600:])
+cmd_v11 = [sys.executable, str(ROOT / 'audit_v11' / 'run_final_audit_v11.py')]
+if args.verify_only:
+    cmd_v11.append('--verify-only')
+proc = subprocess.run(cmd_v11, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+check('v11_audit_passes', proc.returncode == 0, proc.stdout[-600:])
 
 # Pre-result lock integrity.
-lock = json.loads((V15 / 'V15_PRE_RESULT_LOCK.json').read_text())
-for item in lock['files']:
-    p = ROOT / item['path']
-    check('lock_' + re.sub(r'[^a-z0-9]+', '_', item['path'].lower()).strip('_'),
-          p.is_file() and sha(p) == item['sha256'], item['path'])
-check('lock_precedes_execution', (V15 / 'V15_PRE_RESULT_LOCK.json').stat().st_mtime < (V15 / 'V15_EXECUTION.log').stat().st_mtime)
+prov_results = verify_immutable_provenance(ROOT)
+for k, (ok, msg) in prov_results.items():
+    check(k, ok, msg)
 
 # Trace provenance and split.
 prov = json.loads((ROOT / 'trace_data' / 'BURSTGPT_PROVENANCE_V15.json').read_text())
@@ -134,14 +142,44 @@ for p in compile_paths:
         notes.append(f'compile failure {p}: {e}')
 check('python_sources_compile', compile_ok)
 
-latex = subprocess.run(['latexmk', '-pdf', '-interaction=nonstopmode', '-halt-on-error', MANUSCRIPT.name],
-                       cwd=MANUSCRIPT.parent, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-check('latex_compiles', latex.returncode == 0, latex.stdout[-500:])
-log_path = MANUSCRIPT.with_suffix('.log')
-log_text = log_path.read_text(errors='ignore') if log_path.exists() else ''
-check('latex_no_undefined_references', 'undefined references' not in log_text.lower() and 'undefined citations' not in log_text.lower())
-check('latex_no_overfull_boxes', 'Overfull \\hbox' not in log_text and 'Overfull \\vbox' not in log_text)
-check('candidate_pdf_present', PDF.is_file() and PDF.stat().st_size > 100000)
+if args.verify_only:
+    with tempfile.TemporaryDirectory() as td:
+        tmp_man = Path(td) / 'manuscript'
+        shutil.copytree(MANUSCRIPT.parent, tmp_man)
+        latex = subprocess.run(['latexmk', '-pdf', '-interaction=nonstopmode', '-halt-on-error', MANUSCRIPT.name],
+                               cwd=tmp_man, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        log_path = tmp_man / MANUSCRIPT.with_suffix('.log').name
+        log_text = log_path.read_text(errors='ignore') if log_path.exists() else ''
+        latex_ok = (latex.returncode == 0)
+        check('latex_compiles', latex_ok, latex.stdout[-500:])
+        check('latex_no_undefined_references', 'undefined references' not in log_text.lower() and 'undefined citations' not in log_text.lower())
+        check('latex_no_overfull_boxes', 'Overfull \\hbox' not in log_text and 'Overfull \\vbox' not in log_text)
+        tmp_pdf = tmp_man / MANUSCRIPT.with_suffix('.pdf').name
+        pdf_ok = tmp_pdf.is_file() and tmp_pdf.stat().st_size > 100000
+        pdf_note = ''
+        if not pdf_ok:
+            if not latex_ok:
+                pdf_note = 'BLOCKED by latex_compiles: no PDF was produced after compilation failed'
+            else:
+                pdf_note = 'PDF file missing or too small'
+        check('candidate_pdf_present', pdf_ok, pdf_note)
+else:
+    latex = subprocess.run(['latexmk', '-pdf', '-interaction=nonstopmode', '-halt-on-error', MANUSCRIPT.name],
+                           cwd=MANUSCRIPT.parent, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    latex_ok = (latex.returncode == 0)
+    check('latex_compiles', latex_ok, latex.stdout[-500:])
+    log_path = MANUSCRIPT.with_suffix('.log')
+    log_text = log_path.read_text(errors='ignore') if log_path.exists() else ''
+    check('latex_no_undefined_references', 'undefined references' not in log_text.lower() and 'undefined citations' not in log_text.lower())
+    check('latex_no_overfull_boxes', 'Overfull \\hbox' not in log_text and 'Overfull \\vbox' not in log_text)
+    pdf_ok = PDF.is_file() and PDF.stat().st_size > 100000
+    pdf_note = ''
+    if not pdf_ok:
+        if not latex_ok:
+            pdf_note = 'BLOCKED by latex_compiles: no PDF was produced after compilation failed'
+        else:
+            pdf_note = 'PDF file missing or too small'
+    check('candidate_pdf_present', pdf_ok, pdf_note)
 
 pdfinfo = subprocess.run(['pdfinfo', str(PDF)], text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 pages_m = re.search(r'^Pages:\s+(\d+)', pdfinfo.stdout, re.M)
@@ -163,10 +201,13 @@ result = {
     'derived': {'abstract_words': abstract_words, 'pdf_pages': pages, 'v15_max_upper_bound': max_upper},
     'notes': notes,
 }
-(AUDIT / 'FINAL_AUDIT_V15.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+if not args.verify_only:
+    with (AUDIT / 'FINAL_AUDIT_V15.json').open("w", encoding="utf-8", newline="\n") as f:
+        json.dump(result, f, indent=2)
+        f.write("\n")
 
 md = [f'# V15 Integrated Validity and Package Audit\n', f'**Status: {status}. {sum(checks.values())}/{len(checks)} checks passed.**\n',
-      '## Scope\n', 'This audit preserves the V14 hierarchy and verifies the separately locked seven-day BurstGPT robustness replication, trace provenance, numerical claims, manuscript compliance, compilation, and PDF preflight.\n',
+      '## Scope\n', 'This audit preserves the V11 hierarchy and verifies the separately locked seven-day BurstGPT robustness replication, trace provenance, numerical claims, manuscript compliance, compilation, and PDF preflight.\n',
       '## Key verified results\n',
       '- Original V11 strict result remains 0/120 method runs certified.\n',
       '- V15 seven-day high-load audit finds 0/2,280 certifiable policy-scenario pairs.\n',
@@ -176,7 +217,9 @@ md = [f'# V15 Integrated Validity and Package Audit\n', f'**Status: {status}. {s
       '## Checks\n']
 md += [f"- {'PASS' if ok else 'FAIL'} - {name}" for name, ok in checks.items()]
 md += ['\n## Notes\n'] + [f'- {n}' for n in notes]
-(AUDIT / 'FINAL_AUDIT_REPORT_V15.md').write_text('\n'.join(md), encoding='utf-8')
+if not args.verify_only:
+    with (AUDIT / 'FINAL_AUDIT_REPORT_V15.md').open("w", encoding="utf-8", newline="\n") as f:
+        f.write('\n'.join(md) + '\n')
 print(status, sum(checks.values()), '/', len(checks))
 if status != 'PASS':
     for k, v in checks.items():
