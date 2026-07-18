@@ -1,6 +1,6 @@
 {
-  "status": "PASS",
-  "checks_passed": 61,
+  "status": "FAIL",
+  "checks_passed": 60,
   "checks_total": 61,
   "checks": {
     "v14_audit_passes": true,
@@ -56,7 +56,7 @@
     "forbidden_breakthrough_absent": true,
     "forbidden_publicly_absent": true,
     "python_sources_compile": true,
-    "latex_compiles": true,
+    "latex_compiles": false,
     "latex_no_undefined_references": true,
     "latex_no_overfull_boxes": true,
     "candidate_pdf_present": true,
@@ -71,7 +71,7 @@
     "v15_max_upper_bound": 0.003069346108100284
   },
   "notes": [
-    "v14_audit_passes: 67d21fe4a9c6188ab62ec560dcb19dba51d4b1443fd9'}\\n\",\n    \"manuscript_claim_1: none of the 2,280 policy--scenario combinations\",\n    \"manuscript_claim_2: 135 of 190 nominations\",\n    \"manuscript_claim_3: guarded GP 140 of 190\",\n    \"manuscript_claim_4: all six unique DR-BGS scenario--policy pairs\",\n    \"manuscript_claim_5: all twenty unique guarded-GP pairs\",\n    \"manuscript_claim_6: all 31 unique pairs pass both batches\",\n    \"manuscript_claim_7: 92.9\\\\%--94.4\\\\% load reduction\",\n    \"manuscript_claim_8: not a practical deployment recommendation\",\n    \"pdf_page_count_reasonable: pages=37\"\n  ]\n}\n",
+    "v14_audit_passes: PASS {'checks_total': 56, 'checks_passed': 56, 'checks_failed': 0, 'strict_absolute_certified_runs': 0, 'dr_noninferiority_certified_runs': 50, 'gp_noninferiority_certified_runs': 33, 'trace_work_reduction': 0.8395061728395061, 'manuscript_sha256': 'ff323c40a49e1edd41aa59d5fdc7a1dd85274e801c454fede38fd4abbffed5d5', 'pdf_sha256': 'f3933914807ed226d1bbc30027d018af3da9fe5755a562213478b8623ea00989'}\n",
     "lock_v15_seven_day_robustness_v15_seven_day_protocol_md: v15_seven_day_robustness/V15_SEVEN_DAY_PROTOCOL.md",
     "lock_v15_seven_day_robustness_v15_seven_day_config_json: v15_seven_day_robustness/V15_SEVEN_DAY_CONFIG.json",
     "lock_trace_data_burstgpt_first7days_csv: trace_data/BurstGPT_first7days.csv",
@@ -91,7 +91,7 @@
     "claim_informed_consent_statement: Informed Consent Statement",
     "claim_data_availability_statement: Data Availability Statement",
     "claim_conflicts_of_interest: Conflicts of Interest",
-    "latex_compiles: Rc files read:\n  NONE\nLatexmk: This is Latexmk, John Collins, 11 Dec. 2024. Version 4.86.\nLatexmk: Nothing to do for 'FutureInternet_manuscript_candidate_v15.tex'.\nLatexmk: All targets (FutureInternet_manuscript_candidate_v15.pdf) are up-to-date\n\n",
+    "latex_compiles: \nSorry, but latexmk did not succeed for the following reason:\n\n  MiKTeX could not find the script engine 'perl' which is required to execute 'latexmk'.\n\nRemedy:\n\n  Make sure 'perl' is installed on your system.\n\nThe log file hopefully contains the information to get MiKTeX going again:\n\n  C:\\Users\\pc2\\AppData\\Local\\MiKTeX\\miktex\\log\\latexmk.log\n\nFor more information, visit: https://miktex.org/kb/fix-script-engine-not-found\n",
     "pdf_pages_reasonable: pages=37"
   ]
 }

@@ -264,12 +264,12 @@
     {
       "name": "all Python files compile",
       "status": "PASS",
-      "detail": "35 files; errors=[]"
+      "detail": "34 files; errors=[]"
     },
     {
       "name": "manuscript PDF exists",
       "status": "PASS",
-      "detail": "941921"
+      "detail": "1004363"
     },
     {
       "name": "no undefined citations/references",
@@ -290,7 +290,7 @@
     "dr_noninferiority_certified_runs": 50,
     "gp_noninferiority_certified_runs": 33,
     "trace_work_reduction": 0.8395061728395061,
-    "manuscript_sha256": "8d24bd1e79fa2779eadd3c8a73c886155b4752322c6eda70b65bdaf20bd19439",
-    "pdf_sha256": "0bf45e2c751826809f1467d21fe4a9c6188ab62ec560dcb19dba51d4b1443fd9"
+    "manuscript_sha256": "ff323c40a49e1edd41aa59d5fdc7a1dd85274e801c454fede38fd4abbffed5d5",
+    "pdf_sha256": "f3933914807ed226d1bbc30027d018af3da9fe5755a562213478b8623ea00989"
   }
 }

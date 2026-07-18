@@ -1,6 +1,6 @@
 # V15 Integrated Validity and Package Audit
 
-**Status: PASS. 61/61 checks passed.**
+**Status: FAIL. 60/61 checks passed.**
 
 ## Scope
 
@@ -73,7 +73,7 @@ This audit preserves the V14 hierarchy and verifies the separately locked seven-
 - PASS - forbidden_breakthrough_absent
 - PASS - forbidden_publicly_absent
 - PASS - python_sources_compile
-- PASS - latex_compiles
+- FAIL - latex_compiles
 - PASS - latex_no_undefined_references
 - PASS - latex_no_overfull_boxes
 - PASS - candidate_pdf_present
@@ -84,18 +84,7 @@ This audit preserves the V14 hierarchy and verifies the separately locked seven-
 
 ## Notes
 
-- v14_audit_passes: 67d21fe4a9c6188ab62ec560dcb19dba51d4b1443fd9'}\n",
-    "manuscript_claim_1: none of the 2,280 policy--scenario combinations",
-    "manuscript_claim_2: 135 of 190 nominations",
-    "manuscript_claim_3: guarded GP 140 of 190",
-    "manuscript_claim_4: all six unique DR-BGS scenario--policy pairs",
-    "manuscript_claim_5: all twenty unique guarded-GP pairs",
-    "manuscript_claim_6: all 31 unique pairs pass both batches",
-    "manuscript_claim_7: 92.9\\%--94.4\\% load reduction",
-    "manuscript_claim_8: not a practical deployment recommendation",
-    "pdf_page_count_reasonable: pages=37"
-  ]
-}
+- v14_audit_passes: PASS {'checks_total': 56, 'checks_passed': 56, 'checks_failed': 0, 'strict_absolute_certified_runs': 0, 'dr_noninferiority_certified_runs': 50, 'gp_noninferiority_certified_runs': 33, 'trace_work_reduction': 0.8395061728395061, 'manuscript_sha256': 'ff323c40a49e1edd41aa59d5fdc7a1dd85274e801c454fede38fd4abbffed5d5', 'pdf_sha256': 'f3933914807ed226d1bbc30027d018af3da9fe5755a562213478b8623ea00989'}
 
 - lock_v15_seven_day_robustness_v15_seven_day_protocol_md: v15_seven_day_robustness/V15_SEVEN_DAY_PROTOCOL.md
 - lock_v15_seven_day_robustness_v15_seven_day_config_json: v15_seven_day_robustness/V15_SEVEN_DAY_CONFIG.json
@@ -116,11 +105,19 @@ This audit preserves the V14 hierarchy and verifies the separately locked seven-
 - claim_informed_consent_statement: Informed Consent Statement
 - claim_data_availability_statement: Data Availability Statement
 - claim_conflicts_of_interest: Conflicts of Interest
-- latex_compiles: Rc files read:
-  NONE
-Latexmk: This is Latexmk, John Collins, 11 Dec. 2024. Version 4.86.
-Latexmk: Nothing to do for 'FutureInternet_manuscript_candidate_v15.tex'.
-Latexmk: All targets (FutureInternet_manuscript_candidate_v15.pdf) are up-to-date
+- latex_compiles: 
+Sorry, but latexmk did not succeed for the following reason:
 
+  MiKTeX could not find the script engine 'perl' which is required to execute 'latexmk'.
+
+Remedy:
+
+  Make sure 'perl' is installed on your system.
+
+The log file hopefully contains the information to get MiKTeX going again:
+
+  C:\Users\pc2\AppData\Local\MiKTeX\miktex\log\latexmk.log
+
+For more information, visit: https://miktex.org/kb/fix-script-engine-not-found
 
 - pdf_pages_reasonable: pages=37

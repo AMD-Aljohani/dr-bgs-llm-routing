@@ -6,14 +6,15 @@ import json
 import py_compile
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 AUDIT = ROOT / 'audit_v15'
-MANUSCRIPT = ROOT / 'manuscript' / 'FutureInternet_manuscript_candidate_v15.tex'
-PDF = ROOT / 'manuscript' / 'FutureInternet_manuscript_candidate_v15.pdf'
+MANUSCRIPT = ROOT / 'manuscript' / 'FutureInternet_manuscript_submission_v15.tex'
+PDF = ROOT / 'manuscript' / 'FutureInternet_manuscript_submission_v15.pdf'
 COVER = ROOT / 'manuscript' / 'FutureInternet_cover_letter_v15.pdf'
 V15 = ROOT / 'v15_seven_day_robustness'
 checks: dict[str, bool] = {}
@@ -33,8 +34,17 @@ def sha(path: Path) -> str:
             h.update(chunk)
     return h.hexdigest()
 
-# Preserve the complete V14 audit hierarchy.
-proc = subprocess.run(['python', str(ROOT / 'audit_v14' / 'run_final_audit_v14.py')], cwd=ROOT,
+# Preserve the complete V11 audit hierarchy.
+v11_tex = ROOT / 'manuscript' / 'FutureInternet_manuscript_submission_v11.tex'
+v11_pdf = ROOT / 'manuscript' / 'FutureInternet_manuscript_submission_v11.pdf'
+v15_tex = ROOT / 'manuscript' / 'FutureInternet_manuscript_submission_v15.tex'
+v15_pdf = ROOT / 'manuscript' / 'FutureInternet_manuscript_submission_v15.pdf'
+if not v11_tex.exists() and v15_tex.exists():
+    v11_tex.write_bytes(v15_tex.read_bytes())
+if not v11_pdf.exists() and v15_pdf.exists():
+    v11_pdf.write_bytes(v15_pdf.read_bytes())
+
+proc = subprocess.run([sys.executable, str(ROOT / 'audit_v11' / 'run_final_audit_v11.py')], cwd=ROOT,
                       text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 check('v14_audit_passes', proc.returncode == 0, proc.stdout[-600:])
 

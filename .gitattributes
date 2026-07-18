@@ -1,4 +1,5 @@
 * text=auto eol=lf
+trace_data/BurstGPT_first100_public.csv text eol=crlf
 *.pdf binary
 *.png binary
 *.npz binary

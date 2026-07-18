@@ -2,7 +2,9 @@ name: integrity-audit
 
 on:
   push:
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
   audit:
@@ -14,11 +16,16 @@ jobs:
       NUMEXPR_NUM_THREADS: 1
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended latexmk poppler-utils
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -r requirements.txt
-      - run: python audit_v11/run_final_audit_v11.py
-      - run: python calibration/analyze_calibration.py
-      - run: python audit_v11/verify_lock_manifests.py
+      - run: make audit-v15

@@ -101,7 +101,7 @@ markers=re.findall(r'(?i)\b(delve|delves|pivotal|groundbreaking|revolutionary|se
 check('selected promotional/AI markers absent',len(markers)==0,markers)
 
 # Python compilation
-pyfiles=[x for x in ROOT.rglob('*.py') if '__pycache__' not in x.parts]
+pyfiles=[x for x in ROOT.rglob('*.py') if '__pycache__' not in x.parts and '.venv' not in x.parts]
 errors=[]
 for f in pyfiles:
     try: py_compile.compile(str(f),doraise=True)

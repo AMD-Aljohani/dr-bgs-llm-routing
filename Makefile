@@ -29,7 +29,7 @@ locks:
 	python audit_v11/verify_lock_manifests.py
 
 compile:
-	cd manuscript && pdflatex -interaction=nonstopmode -halt-on-error FutureInternet_manuscript_candidate_v15.tex && pdflatex -interaction=nonstopmode -halt-on-error FutureInternet_manuscript_candidate_v15.tex
+	cd manuscript && pdflatex -interaction=nonstopmode -halt-on-error FutureInternet_manuscript_submission_v15.tex && pdflatex -interaction=nonstopmode -halt-on-error FutureInternet_manuscript_submission_v15.tex
 	cd manuscript && pdflatex -interaction=nonstopmode -halt-on-error FutureInternet_cover_letter_v15.tex
 
 report:
