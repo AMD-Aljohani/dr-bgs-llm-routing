@@ -1,0 +1,2 @@
+original_scenario_id,regime,rho,qH,tau,method,selected_idx,evidence_n
+BG11,near_boundary_harder,0.075,0.8,0.5,DR-BGS,15,600

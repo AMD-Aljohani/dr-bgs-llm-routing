@@ -1,0 +1,2 @@
+study_id,scenarios,runs,budget_policies,work_reduction_vs_exhaustive,median_scenario_regret,p90_scenario_regret,max_scenario_median_regret,all_run_max_regret,all_run_success_1pct,all_run_success_5pct,scenario_success_count_all_seeds_within_1pct,scenario_count,one_sided_95pct_cp_lower_bound_scenario_success,mean_exact_match
+DRBGS-V9-LOCKED59,59,295,20,0.8877284595300261,0.0,0.0,0.03493903403859923,0.03493903403859923,0.9661016949152542,1.0,57,59,0.897110837290046,0.9152542372881356

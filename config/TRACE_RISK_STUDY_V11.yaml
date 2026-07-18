@@ -1,0 +1,79 @@
+study_id: TRACE_RISK_STUDY_V11
+created_utc: 2026-07-18T00:00:00Z
+status: frozen_before_result_generation
+source:
+  dataset: BurstGPT
+  repository: https://github.com/HPMLL/BurstGPT
+  public_slice: first_100_rows_of_Hugging_Face_viewer_default_train
+  local_file: trace_data/BurstGPT_first100_public.csv
+  zero_token_rows: retained_in_source_but_excluded_from_replay
+  trace_derived_fields:
+    - arrival_timestamp
+    - request_tokens
+    - response_tokens
+    - total_tokens
+  synthetic_fields:
+    - privacy_class
+  note: The public slice is a compact trace-derived validation supplement, not a replay of the full 121-day corpus.
+trace_split:
+  positive_rows_total: 95
+  training_pool_rows: first_60_positive_rows
+  certification_pool_rows: last_35_positive_rows
+  moving_block_bootstrap_length: 8
+  requests_per_replay: 560
+  chronological_overlap: none_between_pools
+system:
+  K: 40.0
+  mu_max: 120.0
+  beta: 1.0
+  deactivation_mean: 0.75
+  token_to_pressure:
+    rule: J = 3.0 * total_tokens / median_positive_total_tokens_training_pool
+    clip_min: 0.10
+    clip_max_fraction_of_K: 0.25
+scenario_grid:
+  target_offered_load_ratio: [0.70, 0.90]
+  protected_fraction: [0.20, 0.50, 0.80]
+  activation_delay_mean: [0.50, 2.00]
+  total_scenarios: 12
+policy_grid:
+  levels: 19
+  lower_fraction: 0.05
+  upper_fraction: 0.95
+  admissible_rule: alpha_off <= alpha_on
+  policies: 190
+search:
+  methods: [DR-BGS, Guarded-GP]
+  evaluated_policies: 20
+  initialization_seeds: [0, 1, 2, 3, 4]
+  training_replications_per_policy: 12
+  holdout_replications: 30
+  objective:
+    feasible_ranking: cloud_fraction + 0.15 * W
+    feasibility_screen: mean_B_H <= 0.02 and mean_B_L <= 0.05
+    fallback_penalty: cloud_fraction + 0.15*W + 50*max(B_H-0.02,0) + 20*max(B_L-0.05,0)
+certification:
+  independent_replications: 150
+  protected_blocking_threshold: 0.02
+  eligible_rejection_threshold: 0.05
+  protected_violation_risk_budget: 0.10
+  eligible_violation_risk_budget: 0.10
+  familywise_alpha: 0.05
+  multiplicity: Bonferroni_across_two_constraints
+  interval: one_sided_Clopper_Pearson_on_replication_level_violation_indicators
+  decision: certify_only_if_both_upper_bounds_are_at_or_below_risk_budgets
+  failure_behavior: abstain
+primary_outcomes:
+  - certified_fraction_by_method
+  - simultaneous_risk_bound_pass_rate
+  - cloud_fraction_for_certified_policies
+  - holdout_excess_relative_to_exhaustive_training_selection
+  - high_fidelity_replication_reduction
+secondary_outcomes:
+  - protected_and_eligible_violation_counts
+  - certification_abstention_rate
+  - DR-BGS_vs_Guarded-GP_ablation
+claims_boundary:
+  - certification_is_conditional_on_the_declared_trace_slice_bootstrap_and_system_model
+  - certification_does_not_establish_production_safety
+  - trace_slice_validation_does_not_represent_the_full_BurstGPT_corpus

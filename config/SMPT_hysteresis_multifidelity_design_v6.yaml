@@ -1,0 +1,68 @@
+study:
+  name: C_MIGR_H_v5
+  target_journal: Simulation Modelling Practice and Theory
+  primary_application: privacy_constrained_hybrid_local_cloud_LLM_routing
+  additional_hardware_campaign: false
+
+policy_space:
+  grid_levels: 19
+  level_fractions: [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95]
+  admissible_rule: alpha_off <= alpha_on
+  total_pairs: 190
+  strict_hysteresis_pairs: 171
+  single_threshold_diagonal: 19
+
+low_fidelity:
+  model: reflected_markov_modulated_diffusion
+  grid_points: 161
+  numerical_method: nearest_neighbour_CTMC_stationary_solve
+
+high_fidelity:
+  model: event_driven_compound_jump_simulator
+  common_random_numbers: true
+  selection_replications: 8
+  exhaustive_training_replications: 20
+  holdout_replications: 30
+  training_horizon: 900
+  training_burn_in: 225
+  certification_horizon: 1200
+  certification_burn_in: 300
+  holdout_horizon: 1200
+  holdout_burn_in: 300
+
+candidate_construction:
+  diffusion_top_k: 8
+  include_all_single_threshold_policies: true
+  include_geometric_guards: true
+  neighbourhood_radius: 2
+  affine_corrected_additions_per_round: 7
+  maximum_rounds: 3
+  soft_candidate_cap: 48
+
+explored_set_certificate:
+  relative_indifference_zone: 0.05
+  familywise_error: 0.05
+  planned_replication_looks: [3, 6, 10, 15, 20]
+  interval: one_sided_paired_student_t
+  multiplicity: Bonferroni_over_candidates_and_planned_looks
+  fallback: best_20_replication_mean_within_explored_set
+  scope: explored_candidate_set_only
+
+validation:
+  development_scenarios: 24
+  development_selection: maximin_12_factorial_plus_12_existing_LHS
+  fresh_scenarios: 12
+  fresh_design: new_10_dimensional_Latin_hypercube_after_algorithm_freeze
+  exhaustive_reference: all_190_policies
+  primary_outputs:
+    - holdout_regret_vs_exhaustive
+    - simulation_work_reduction
+    - certificate_rate
+    - exact_policy_match
+    - hysteresis_gain_vs_single_threshold
+    - weight_sensitive_policy_switching
+
+objective_weight_analysis:
+  metrics: [W, B_H, B_L, cloud_fraction]
+  weight_profiles: 29
+  composition: four_axis_extremes_plus_equal_weights_plus_24_Dirichlet_draws

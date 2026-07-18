@@ -1,0 +1,3 @@
+method,runs,certified_runs,certified_fraction,abstentions,exact_reference_recoveries,median_max_upper,p90_max_upper,max_max_upper,median_mean_cost_excess,max_mean_cost_excess
+DR-BGS,60,50,0.8333333333333334,10,50,0.026926471132857364,0.6152677579234329,0.6409500400579764,0.0,0.2765233168213752
+Guarded-GP,60,33,0.55,27,33,0.026926471132857364,0.653698726085423,0.6727044573500587,0.0,0.28539764533010115

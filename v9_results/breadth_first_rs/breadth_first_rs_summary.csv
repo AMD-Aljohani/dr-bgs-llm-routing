@@ -1,0 +1,2 @@
+method,runs,scenarios,training_replications_per_run,median_regret,p90_regret,maximum_regret,within_1pct,within_5pct,exact
+breadth_first_two_stage_RS,180,36,400,0.0,0.0277669661984004,0.1167003338007302,0.7055555555555556,0.9611111111111111,0.22777777777777777

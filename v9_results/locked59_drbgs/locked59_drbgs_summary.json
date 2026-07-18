@@ -1,0 +1,17 @@
+{
+  "study_id": "DRBGS-V9-LOCKED59",
+  "scenarios": 59,
+  "runs": 295,
+  "budget_policies": 20,
+  "work_reduction_vs_exhaustive": 0.8877284595300261,
+  "median_scenario_regret": 0.0,
+  "p90_scenario_regret": 0.0,
+  "max_scenario_median_regret": 0.03493903403859923,
+  "all_run_max_regret": 0.03493903403859923,
+  "all_run_success_1pct": 0.9661016949152542,
+  "all_run_success_5pct": 1.0,
+  "scenario_success_count_all_seeds_within_1pct": 57,
+  "scenario_count": 59,
+  "one_sided_95pct_cp_lower_bound_scenario_success": 0.897110837290046,
+  "mean_exact_match": 0.9152542372881356
+}

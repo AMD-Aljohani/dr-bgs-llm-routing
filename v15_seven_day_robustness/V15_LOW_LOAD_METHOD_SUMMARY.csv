@@ -1,0 +1,4 @@
+method,run_labels,confirmed_labels,physical_scenarios,unique_scenario_policy_pairs,unique_pairs_confirmed,max_upper_bound
+DR-BGS,60,60,6,6,6,0.003069346108100284
+Exhaustive-training,6,6,6,6,6,0.003069346108100284
+Guarded-GP,60,60,6,12,12,0.003069346108100284

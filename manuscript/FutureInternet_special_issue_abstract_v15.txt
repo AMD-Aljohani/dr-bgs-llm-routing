@@ -1,0 +1,14 @@
+Proposed Special Issue
+Cloud/Edge Computing for Next-Generation Networks: Architecture and Applications
+
+Article title
+Guarded Multi-Fidelity Optimization with Trace-Derived Risk Auditing for Privacy-Constrained Cloud-Edge LLM Serving
+
+Authors
+Abdulaziz M. D. Aljohani; Khaled M. Alhawiti
+
+Abstract
+Privacy-constrained cloud-edge LLM services must activate remote capacity before local pressure causes admission loss while avoiding unnecessary cloud cost. We study 190 two-threshold policies using a compound-jump simulator and a reflected-diffusion screen. Diffusion-Residual Bayesian Guarded Search (DR-BGS) combines affine calibration, Gaussian-process residual learning, and structural anchors. On 36 exhaustively evaluated synthetic scenarios, a 20-policy budget reduces high-fidelity replications by 88.77%; all 180 selections remain within 1% of exhaustive training selection on independent holdout streams, with 0.348% maximum excess. A chronologically split BurstGPT study then separates nomination from certification. Under 2% protected-request and 5% eligible-request blocking limits, all 120 method runs abstain, and exhaustive auditing finds 0 of 2,280 certifiable policy-scenario pairs at the original load ratios. Increasing certification evidence does not rescue those regimes. An exploratory frontier identifies load reduction as the most consistent route to feasibility. A separately locked seven-day robustness replication uses 11,810 search and 6,086 later certification records: it again finds 0 of 2,280 high-load certifiable pairs, while all 18 cross-method-distinct low-load scenario-policy pairs pass two disjoint 1,200-replay batches. The results distinguish efficient nomination, operational feasibility, and independent certification, without claiming production safety.
+
+Relevance to the Special Issue
+The manuscript addresses cloud-edge resource allocation and scheduling for privacy-constrained LLM services. It models finite local capacity, delayed remote activation, admission risk, cloud-use cost, workload burstiness, and explicit abstention when independent evidence does not support the declared service-level target.

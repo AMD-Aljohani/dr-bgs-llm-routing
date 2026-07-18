@@ -1,0 +1,11 @@
+{
+  "rows_source": 100,
+  "positive_rows": 95,
+  "training_rows": 60,
+  "certification_rows": 35,
+  "training_median_total_tokens": 912.0,
+  "training_mean_total_tokens": 1035.7166666666667,
+  "certification_mean_total_tokens": 988.6285714285714,
+  "training_timestamp_span_s": 10438.0,
+  "certification_timestamp_span_s": 17994.0
+}

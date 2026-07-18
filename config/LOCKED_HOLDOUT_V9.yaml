@@ -1,0 +1,38 @@
+study_id: DRBGS-V9-LOCKED59
+lock_time_utc: '2026-07-17T17:12:10Z'
+status: locked_before_generation
+purpose: post-audit independent scenario validation
+scenario_count: 59
+scenario_distribution: iid_uniform_transformed
+scenario_seed: 2026170717
+simulation_seed_offset: 1700000000
+policy_grid_levels: 19
+policy_count: 190
+training_replications_per_policy: 20
+holdout_replications_per_policy: 30
+training_horizon: 900.0
+training_burn_in: 225.0
+holdout_horizon: 1200.0
+holdout_burn_in: 300.0
+optimizer: DR-BGS
+optimizer_budget_policies: 20
+optimizer_initialization_seeds: [20260717, 20260718, 20260719, 20260720, 20260721]
+success_criterion:
+  per_run_holdout_excess_max: 0.01
+  reference: exhaustive_training_selection_evaluated_on_independent_holdout
+parameter_distribution:
+  offered_load_ratio: uniform[0.55,0.90]
+  arrival_scv: bernoulli_equal{1.0,4.0}
+  mean_jump_fraction_of_capacity: uniform[0.05,0.10]
+  activation_delay_mean: loguniform[0.25,4.0]
+  high_privacy_share: uniform[0.20,0.80]
+  service_degradation_beta: uniform[0.60,1.40]
+  jump_size_cv: uniform[0.50,2.00]
+  cloud_cost_multiplier: loguniform[0.25,4.0]
+  deactivation_delay_mean: uniform[0.25,2.00]
+  normalized_capacity: uniform[30,80]
+prohibited_after_lock:
+  - algorithm_parameter_changes
+  - scenario_regeneration
+  - exclusion_of_failed_scenarios
+  - replacement_of_initialization_seeds

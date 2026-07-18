@@ -1,0 +1,2 @@
+scenarios,runs,budget_policies,work_reduction_vs_exhaustive,median_scenario_regret,p90_scenario_regret,max_scenario_median_regret,all_run_max_regret,all_run_success_1pct,all_run_success_5pct,all_scenarios_all_seeds_within_5pct,mean_exact_match
+59,295,20,0.8877284595300261,0.0,0.0,0.003060773073709198,0.003060773073709198,1.0,1.0,True,0.9152542372881356

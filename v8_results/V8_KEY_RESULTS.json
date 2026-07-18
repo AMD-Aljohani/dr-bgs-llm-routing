@@ -1,0 +1,81 @@
+{
+  "primary_method": "Diffusion-Residual Bayesian Guarded Search (DR-BGS)",
+  "reference_definition": "policy selected by exhaustive training evaluation of all policies, evaluated on independent holdout streams",
+  "development_scenarios": 36,
+  "development_runs": 180,
+  "high_fidelity_policy_budget": 20,
+  "base_policy_count": 190,
+  "base_high_fidelity_replication_reduction": 0.8877284595300261,
+  "development": {
+    "DR_BGS_max_holdout_excess": 0.0034778710551162,
+    "DR_BGS_within_1pct": 1.0,
+    "DR_BGS_exact_training_policy_recovery": 0.8888888888888888,
+    "guarded_GP_max_holdout_excess": 0.0087808283183341,
+    "guarded_GP_within_1pct": 1.0,
+    "guarded_GP_exact_training_policy_recovery": 0.8611111111111112,
+    "standard_GP_max_holdout_excess": 0.0721969730053362,
+    "residual_GP_without_guards_max_holdout_excess": 0.0721969730053362,
+    "budget12_DR_BGS_max_holdout_excess": 0.0106654806927014,
+    "budget12_guarded_GP_max_holdout_excess": 0.0087808283183341
+  },
+  "additional_scenario_checks": {
+    "latin_hypercube_scenarios": 59,
+    "latin_hypercube_runs": 295,
+    "latin_hypercube_max_holdout_excess": 0.0063767606402661,
+    "iid_scenarios": 59,
+    "iid_runs": 295,
+    "iid_max_holdout_excess": 0.0030607730737091,
+    "iid_within_1pct": 1.0,
+    "iid_exact_training_policy_recovery": 0.9152542372881356,
+    "provenance_note": "descriptive additional-scenario evaluation; no immutable preregistration in the archive predates scenario generation, so no formal population reliability bound is claimed"
+  },
+  "scaling": [
+    {
+      "level_count": 19,
+      "policy_count": 190,
+      "scenarios": 3,
+      "mean_evaluated_fraction": 0.1052631578947368,
+      "mean_work_reduction": 0.8869565217391303,
+      "median_regret": 0.0145199251602937,
+      "max_regret": 0.059640244137039,
+      "exact_match_fraction": 0.3333333333333333
+    },
+    {
+      "level_count": 31,
+      "policy_count": 496,
+      "scenarios": 3,
+      "mean_evaluated_fraction": 0.0403225806451612,
+      "mean_work_reduction": 0.956463496316142,
+      "median_regret": 0.0010476062658832,
+      "max_regret": 0.0314745686746785,
+      "exact_match_fraction": 0.3333333333333333
+    },
+    {
+      "level_count": 51,
+      "policy_count": 1326,
+      "scenarios": 3,
+      "mean_evaluated_fraction": 0.0150829562594268,
+      "mean_work_reduction": 0.9836806427316094,
+      "median_regret": 0.0,
+      "max_regret": 0.0,
+      "exact_match_fraction": 0.0
+    }
+  ],
+  "robust_pareto": {
+    "scenario_count": 95.0,
+    "weight_profile_count": 287.0,
+    "median_pareto_count": 118.0,
+    "p90_pareto_count": 155.0,
+    "median_distinct_optima": 13.0,
+    "p90_distinct_optima": 19.0,
+    "robust_differs_from_equal_fraction": 1.0,
+    "robust_is_pareto_fraction": 1.0,
+    "median_equal_weight_max_regret": 1.0,
+    "median_robust_max_regret": 0.4615104497104088,
+    "median_max_regret_reduction": 0.5262553501180398,
+    "median_equal_weight_penalty_of_robust": 0.1741469340540236,
+    "median_equal_fraction_profiles_over_5pct": 0.1951219512195122,
+    "median_robust_fraction_profiles_over_5pct": 0.8362369337979094
+  },
+  "component_ablation_source": "v8_results/component_ablation/component_ablation_summary.csv"
+}

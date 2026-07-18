@@ -1,0 +1,43 @@
+{
+  "study_id": "V15_BURSTGPT_SEVEN_DAY_ROBUSTNESS",
+  "study_type": "separately_locked_trace_robustness_replication",
+  "trace_source": "BurstGPT_1.csv",
+  "trace_source_sha256": "46fc9480ef0b748ecb2b51d512ff08c196b031782cbe6f78e28044d768e86d5a",
+  "seven_day_end_seconds": 604800,
+  "search_end_seconds": 432000,
+  "positive_tokens_only": true,
+  "moving_block_length": 8,
+  "requests_per_replay": 560,
+  "K": 40.0,
+  "high_load_rho_values": [0.70, 0.90],
+  "low_load_rho": 0.05,
+  "qH_values": [0.20, 0.50, 0.80],
+  "tau_values": [0.50, 2.00],
+  "policy_count": 190,
+  "training_reps_per_policy": 12,
+  "search_budget_policies": 20,
+  "high_load_search_initializations": 5,
+  "high_load_certification_replays": 150,
+  "low_load_search_initializations": 10,
+  "low_load_certification_replays_A": 1200,
+  "low_load_certification_replays_B": 1200,
+  "protected_blocking_limit": 0.02,
+  "eligible_blocking_limit": 0.05,
+  "violation_risk_limit": 0.10,
+  "familywise_alpha": 0.05,
+  "seed_scheme": {
+    "high_training_base": 301000000,
+    "high_certification_base": 601000000,
+    "low_training_base": 901000000,
+    "low_certification_A_base": 1201000000,
+    "low_certification_B_base": 1601000000,
+    "scenario_stride": 1000000,
+    "search_initialization_base": 202607180
+  },
+  "claim_boundary": [
+    "does not replace V11, V12, or V13",
+    "does not establish production safety",
+    "exact risk bounds are conditional on the declared replay generator",
+    "privacy labels and pressure conversion remain synthetic"
+  ]
+}

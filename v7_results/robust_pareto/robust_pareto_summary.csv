@@ -1,0 +1,2 @@
+scenario_count,weight_profile_count,median_pareto_count,p90_pareto_count,median_distinct_optima,p90_distinct_optima,robust_differs_from_equal_fraction,robust_is_pareto_fraction,median_equal_weight_max_regret,median_robust_max_regret,median_max_regret_reduction,median_equal_weight_penalty_of_robust,median_equal_fraction_profiles_over_5pct,median_robust_fraction_profiles_over_5pct
+95,287,118.0,155.0,13.0,19.0,1.0,1.0,1.0,0.4615104497104088,0.5262553501180398,0.17414693405402362,0.1951219512195122,0.8362369337979094

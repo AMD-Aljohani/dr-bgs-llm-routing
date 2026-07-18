@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.82in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\begin{document}
+\begin{center}
+{\Large\bfseries V15 Integrated Validity and Package Audit}\\[4pt]
+Future Internet submission candidate\\[8pt]
+{\bfseries Status: PASS. All 61 integrated checks passed.}
+\end{center}
+
+\section*{Scope}
+The audit preserves the V14 result hierarchy and verifies the separately locked seven-day BurstGPT robustness replication, trace provenance, numerical claims, manuscript compliance, archived code, LaTeX compilation, and PDF preflight. The original V11 strict result is not replaced or reinterpreted.
+
+\section*{Verified result hierarchy}
+\begin{tabular}{p{0.51\linewidth}p{0.39\linewidth}}
+\toprule
+Study component & Audited result \\
+\midrule
+V11 strict absolute gate & 0/120 method runs certified \\
+V11 retrospective noninferiority & DR-BGS 50/60; guarded GP 33/60 \\
+V12 exhaustive original regime & 0/2,280 policy--scenario pairs certified \\
+V13 compact-slice low-load confirmation & 31 cross-method-distinct pairs passed both batches \\
+V15 seven-day trace basis & 19,431 rows; 17,896 positive-token rows \\
+V15 chronological pools & 11,810 search; 6,086 certification records \\
+V15 seven-day high-load audit & 0/2,280 policy--scenario pairs certified \\
+V15 high-load nominations & DR-BGS 0/60; guarded GP 0/60; exhaustive 0/12 \\
+V15 low-load method-specific pairs & DR-BGS 6/6; guarded GP 12/12; exhaustive 6/6 \\
+V15 cross-method union & 18/18 distinct pairs passed both batches \\
+V15 maximum upper risk bound & 0.00306935, below the 0.10 budget \\
+\bottomrule
+\end{tabular}
+
+\section*{Trace-provenance checks}
+The archived compact trace is an exact row-for-row prefix of the official BurstGPT release. The seven-day robustness window is defined by elapsed timestamps from 0 to 604,800 seconds rather than by a round record count. The official source hash, seven-day subset hash, protocol, configuration, execution code, and pre-result lock are archived and verified. The protocol lock precedes successful result generation.
+
+\section*{Claim-boundary checks}
+The manuscript retains universal abstention at the original load levels, labels the operating-envelope work as exploratory, and describes the low-load result as a confirmation that the gate can issue positive decisions inside a feasible regime. It does not claim production safety, practical suitability of $\rho=0.05$, DR-BGS superiority in the low-load confirmation, or new real-workload information from repeated bootstrap simulation.
+
+\section*{Manuscript and technical checks}
+\begin{itemize}
+\item The abstract contains 191 words.
+\item Author Contributions, Funding, Institutional Review Board Statement, Informed Consent Statement, Data Availability Statement, Acknowledgments, and Conflicts of Interest are present.
+\item All archived Python sources compile.
+\item The V15 LaTeX source compiles without undefined references, undefined citations, or overfull boxes.
+\item The 37-page PDF passed font and page preflight and visual inspection of the abstract, trace-provenance text, seven-day methods and results, combined figure, discussion, conclusion, and back matter.
+\end{itemize}
+
+\section*{External release boundary}
+The scientific package is internally complete. Before submission, reserve and insert the version-specific Zenodo DOI, publish and verify the immutable GitHub tag \texttt{v1.5.0}, then rerun the URL/DOI check on the final public files. Future Internet permits free-format initial submission; transfer to MDPI's current class package may therefore be completed either before submission or during production, but any conversion must be followed by another compile and visual audit.
+
+\end{document}

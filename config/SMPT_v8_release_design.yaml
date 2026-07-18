@@ -1,0 +1,67 @@
+study: SMPT_v8_release
+primary_method: diffusion_residual_bayesian_guarded_search
+abbreviation: DR-BGS
+policy_space:
+  type: triangular_hysteresis_grid
+  base_levels: 19
+  base_policy_count: 190
+low_fidelity:
+  model: stationary_reflected_switching_diffusion
+high_fidelity:
+  model: event_driven_compound_jump_simulator
+reference_workflow:
+  selection: exhaustive_training_mean_over_all_policies
+  evaluation: independent_holdout_streams
+  note: not_a_holdout_oracle
+DR_BGS:
+  structural_anchors:
+    - [0.05, 0.05]
+    - [0.95, 0.05]
+    - [0.95, 0.95]
+    - [0.50, 0.05]
+    - [0.50, 0.50]
+  diffusion_ranked_initial_policies: 3
+  initial_design_size: 8
+  high_fidelity_policy_budget: 20
+  training_replications_per_policy: 20
+  holdout_replications: 30
+  gaussian_process:
+    target: residual_after_affine_diffusion_calibration
+    kernel: Matern_5_2
+    fixed_length_scale: [0.2, 0.2]
+    acquisition: lower_confidence_bound
+    beta: 2_plus_0.25_log1p_n
+  fixed_initialization_seeds: 5
+comparators:
+  - random_subset_ranking_selection
+  - high_fidelity_local_search
+  - diffusion_top_k
+  - standard_GP_Bayesian_optimization
+  - guarded_GP_without_diffusion_residual
+  - residual_GP_without_structural_guards
+  - MIGR_H
+  - exhaustive_training_selection
+additional_scenario_sets:
+  latin_hypercube:
+    scenario_count: 59
+    interpretation: descriptive_holdout_style_check
+  iid:
+    scenario_count: 59
+    interpretation: descriptive_holdout_style_check
+  provenance_limitation: no_immutable_preregistration_in_archive_precedes_generation
+  formal_population_reliability_claim: false
+scaling:
+  policy_levels: [19, 31, 51]
+  policy_counts: [190, 496, 1326]
+  representative_scenarios: [F01, R03, V01]
+  high_fidelity_policy_budget: 20
+  training_replications_per_policy: 6
+  holdout_replications: 10
+  interpretation: exploratory
+robust_decision:
+  metrics: [residence_proxy, high_privacy_blocking, low_privacy_blocking, cloud_fraction]
+  weight_profiles: 287
+  simplex_step: 0.1
+  includes_equal_weight_profile: true
+  decision_rule: minimax_minmax_normalized_additive_regret
+  pareto_uncertainty_aware: false

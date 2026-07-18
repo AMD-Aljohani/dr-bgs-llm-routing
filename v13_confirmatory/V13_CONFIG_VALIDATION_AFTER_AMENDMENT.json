@@ -1,0 +1,47 @@
+{
+  "valid": true,
+  "scenarios": [
+    {
+      "scenario_id": "C01",
+      "K": 40.0,
+      "rho": 0.05,
+      "qH": 0.2,
+      "tau": 0.5
+    },
+    {
+      "scenario_id": "C02",
+      "K": 40.0,
+      "rho": 0.05,
+      "qH": 0.2,
+      "tau": 2.0
+    },
+    {
+      "scenario_id": "C03",
+      "K": 40.0,
+      "rho": 0.05,
+      "qH": 0.5,
+      "tau": 0.5
+    },
+    {
+      "scenario_id": "C04",
+      "K": 40.0,
+      "rho": 0.05,
+      "qH": 0.5,
+      "tau": 2.0
+    },
+    {
+      "scenario_id": "C05",
+      "K": 40.0,
+      "rho": 0.05,
+      "qH": 0.8,
+      "tau": 0.5
+    },
+    {
+      "scenario_id": "C06",
+      "K": 40.0,
+      "rho": 0.05,
+      "qH": 0.8,
+      "tau": 2.0
+    }
+  ]
+}

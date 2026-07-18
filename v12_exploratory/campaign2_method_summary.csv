@@ -1,0 +1,4 @@
+method,method_runs,certified_runs,conditional_certified_fraction,all_runs,all_certified,all_config_fraction
+DR-BGS,190,135,0.7105263157894737,2745,135,0.04918032786885246
+Exhaustive-training,38,28,0.7368421052631579,549,28,0.051001821493624776
+Guarded-GP,190,140,0.7368421052631579,2745,140,0.051001821493624776
