@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "main_manuscript_compiles": true,
+  "supplement_compiles": true,
+  "validation_report_compiles": true,
+  "development_version_identifiers_in_paths": [],
+  "notes": [
+    "The default branch package uses purpose-based paths.",
+    "Earlier immutable research stages remain preserved in Git tags and Zenodo.",
+    "Scientific inputs and reported numerical values were not altered."
+  ]
+}

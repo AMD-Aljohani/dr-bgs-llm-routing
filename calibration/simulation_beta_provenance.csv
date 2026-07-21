@@ -1,7 +1,0 @@
-source,beta_normalized,note
-Direct telemetry point estimate,1.2585087001564945,"Observed KV interval rescaled to u in [0,1]"
-Direct telemetry bootstrap lower 95%,1.1591917822905717,Measurement-error plus residual bootstrap
-Direct telemetry bootstrap upper 95%,1.3578631485537898,Measurement-error plus residual bootstrap
-Core factorial,1.0,Central stress-test value
-Executed robustness minimum,0.6004963699698086,Deliberately weaker degradation than direct calibration
-Executed robustness maximum,1.376384577519481,Covers upper direct-calibration interval

@@ -1,24 +1,20 @@
 cff-version: 1.2.0
-title: "Guarded Multi-Fidelity Optimization with Trace-Derived Risk Auditing for Privacy-Constrained Cloud-Edge LLM Serving"
-message: "Please cite the manuscript and this software release."
+message: "Please cite the archived release and the associated manuscript."
+title: "Evidence-Gated Cloud-Edge LLM Serving with Delayed Activation"
 type: software
 authors:
   - family-names: Aljohani
-    given-names: "Abdulaziz M. D."
-    orcid: "https://orcid.org/0009-0008-6741-3105"
+    given-names: Abdulaziz Musallam D.
+    affiliation: University of Tabuk
   - family-names: Alhawiti
-    given-names: "Khaled M."
-    orcid: "https://orcid.org/0009-0005-4529-1301"
-version: 1.5.0
-date-released: 2026-07-18
-url: "https://github.com/AMD-Aljohani/dr-bgs-llm-routing"
+    given-names: Khaled M.
+    affiliation: University of Tabuk
 repository-code: "https://github.com/AMD-Aljohani/dr-bgs-llm-routing"
+url: "https://doi.org/10.5281/zenodo.21434924"
 license: MIT
 keywords:
   - cloud-edge computing
   - LLM serving
   - simulation optimization
   - multi-fidelity modeling
-  - risk auditing
-  - trace replay
-  - abstention
+  - risk certification

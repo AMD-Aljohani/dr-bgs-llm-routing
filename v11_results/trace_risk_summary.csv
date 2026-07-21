@@ -1,3 +1,0 @@
-method,runs,certified_runs,certified_fraction,median_holdout_excess,p90_holdout_excess,max_holdout_excess,median_cloud_fraction,max_upper_H,max_upper_L,abstentions,search_plus_cert_reps,exhaustive_plus_cert_reps,replication_reduction
-DR-BGS,60,0,0.0,0.0,0.0,0.14988635716083232,0.48123367968300174,1.0,0.99983122885689,60,390,2430,0.8395061728395061
-Guarded-GP,60,0,0.0,0.0,0.07263211520118233,0.14988635716083232,0.483499858934306,1.0,1.0,60,390,2430,0.8395061728395061

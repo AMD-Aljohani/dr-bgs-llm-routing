@@ -1,0 +1,29 @@
+{
+  "protocol_name": "Retrospective analytical and hardware-calibrated model-form validation",
+  "created_utc": "2026-07-20T05:47:24.060093+00:00",
+  "status": "retrospective_post_hoc_validation",
+  "preregistered": false,
+  "created_after_primary_results": true,
+  "analyses": [
+    "Independent reimplementation of DR-BGS and GP ablations from archived policy surfaces",
+    "Policy-surface ranking and calibration audit",
+    "Third-order jump-remainder and boundary-tail indicators",
+    "Direct service-law model comparison and parametric bootstrap",
+    "Cross-hardware and cross-model normalized service-curve transport",
+    "Low-fidelity model-form stress tests",
+    "Independent CTMC and reflected-diffusion Monte Carlo triangulation"
+  ],
+  "claim_boundary": "This campaign strengthens implementation, analytical, and model-form credibility. It does not constitute end-to-end hardware execution, hardware-in-the-loop controller validation, or production-safety evidence.",
+  "random_seeds": {
+    "bootstrap": 20260720,
+    "gp_reanalysis": [
+      20260717,
+      20260718,
+      20260719,
+      20260720,
+      20260721
+    ],
+    "solver_triangulation_base": 20260720
+  },
+  "repository_layout": "clean purpose-based release"
+}
