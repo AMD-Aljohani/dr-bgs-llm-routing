@@ -1,0 +1,21 @@
+{
+  "selected_scenarios": [
+    "F01",
+    "R24",
+    "R07",
+    "R20",
+    "R23",
+    "V06"
+  ],
+  "n_policy_cases": 18,
+  "median_policy_rank_spearman": 1.0,
+  "best_policy_agreement_fraction": 0.8333333333333334,
+  "max_ctmc161_abs_error_vs_archive": 0.010994092273311828,
+  "median_grid_relative_change": 0.011663460346873811,
+  "max_grid_relative_change": 0.022535866414291963,
+  "median_mc_relative_error_vs_ctmc321": 0.025216741363583123,
+  "p90_mc_relative_error_vs_ctmc321": 0.04939208998360739,
+  "max_mc_relative_error_vs_ctmc321": 0.06671634997875721,
+  "mc_ci_coverage_fraction": 0.7222222222222222,
+  "runtime_seconds": 23.54071617126465
+}

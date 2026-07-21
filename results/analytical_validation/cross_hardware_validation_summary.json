@@ -1,0 +1,137 @@
+{
+  "shared_fit": {
+    "beta_shared": 0.7381447220055203,
+    "normalized_rmse": 0.10536490595017316,
+    "normalized_r2": 0.8122695503035803
+  },
+  "domain_fits": [
+    {
+      "dataset": "Qwen2.5-7B / RTX 3090 (direct telemetry)",
+      "model": "exponential",
+      "parameter": 0.7389516385318975,
+      "normalized_rmse": 0.10253778224987181,
+      "normalized_r2": 0.8277364824711823,
+      "loocv_rmse": 0.13170313715121842,
+      "spearman_concurrency_rate": -1.0,
+      "kendall_concurrency_rate": -0.9999999999999999,
+      "terminal_rate_fraction": 0.32104544567973475
+    },
+    {
+      "dataset": "Mistral-7B / RTX 3090",
+      "model": "exponential",
+      "parameter": 0.9297381525648706,
+      "normalized_rmse": 0.0913289952417198,
+      "normalized_r2": 0.882259026796353,
+      "loocv_rmse": 0.11419997024989478,
+      "spearman_concurrency_rate": -1.0,
+      "kendall_concurrency_rate": -0.9999999999999999,
+      "terminal_rate_fraction": 0.2663665353592196
+    },
+    {
+      "dataset": "Qwen2.5-7B / RTX 4090",
+      "model": "exponential",
+      "parameter": 0.5673228174680077,
+      "normalized_rmse": 0.08059960225866365,
+      "normalized_r2": 0.8360647289310834,
+      "loocv_rmse": 0.10830405118775079,
+      "spearman_concurrency_rate": -1.0,
+      "kendall_concurrency_rate": -0.9999999999999999,
+      "terminal_rate_fraction": 0.43489254108723135
+    },
+    {
+      "dataset": "Qwen2.5-7B / RTX 3090 (independent summary)",
+      "model": "exponential",
+      "parameter": 0.7357625596213696,
+      "normalized_rmse": 0.09812119564168907,
+      "normalized_r2": 0.8353709311047174,
+      "loocv_rmse": 0.12744903877563998,
+      "spearman_concurrency_rate": -1.0,
+      "kendall_concurrency_rate": -0.9999999999999999,
+      "terminal_rate_fraction": 0.3232049545190633
+    }
+  ],
+  "leave_one_domain_out": [
+    {
+      "held_out_dataset": "Qwen2.5-7B / RTX 3090 (direct telemetry)",
+      "trained_beta": 0.7377364040597002,
+      "normalized_rmse": 0.10253867033972597,
+      "max_absolute_error": 0.1571496862203694,
+      "spearman_pred_observed": 1.0,
+      "kendall_pred_observed": 0.9999999999999999
+    },
+    {
+      "held_out_dataset": "Mistral-7B / RTX 3090",
+      "trained_beta": 0.6511285128026779,
+      "normalized_rmse": 0.1312030672348097,
+      "max_absolute_error": 0.2550904383575133,
+      "spearman_pred_observed": 1.0,
+      "kendall_pred_observed": 0.9999999999999999
+    },
+    {
+      "held_out_dataset": "Qwen2.5-7B / RTX 4090",
+      "trained_beta": 0.8308529102589545,
+      "normalized_rmse": 0.12429090461930628,
+      "max_absolute_error": 0.18683453388709914,
+      "spearman_pred_observed": 1.0,
+      "kendall_pred_observed": 0.9999999999999999
+    }
+  ],
+  "pairwise": [
+    {
+      "dataset_a": "Qwen2.5-7B / RTX 3090 (direct telemetry)",
+      "dataset_b": "Mistral-7B / RTX 3090",
+      "rmse_between_normalized_curves": 0.06723039098318773,
+      "max_absolute_difference": 0.09700210050205915,
+      "spearman": 1.0,
+      "kendall": 0.9999999999999999
+    },
+    {
+      "dataset_a": "Qwen2.5-7B / RTX 3090 (direct telemetry)",
+      "dataset_b": "Qwen2.5-7B / RTX 4090",
+      "rmse_between_normalized_curves": 0.0708704761610087,
+      "max_absolute_difference": 0.1138470954074966,
+      "spearman": 1.0,
+      "kendall": 0.9999999999999999
+    },
+    {
+      "dataset_a": "Mistral-7B / RTX 3090",
+      "dataset_b": "Qwen2.5-7B / RTX 4090",
+      "rmse_between_normalized_curves": 0.13257849893319915,
+      "max_absolute_difference": 0.20639766307367569,
+      "spearman": 1.0,
+      "kendall": 0.9999999999999999
+    }
+  ],
+  "bootstrap": [
+    {
+      "dataset": "Qwen2.5-7B / RTX 3090 (direct telemetry)",
+      "n_bootstrap": 5000,
+      "beta_hat": 0.7389516385318975,
+      "beta_ci_low": 0.49042630613909804,
+      "beta_ci_high": 0.9460417115934091,
+      "terminal_fraction_hat": 0.4776143656464408,
+      "terminal_fraction_ci_low": 0.38827488972838,
+      "terminal_fraction_ci_high": 0.6123652834521103
+    },
+    {
+      "dataset": "Mistral-7B / RTX 3090",
+      "n_bootstrap": 5000,
+      "beta_hat": 0.9297381525648706,
+      "beta_ci_low": 0.6664403577005658,
+      "beta_ci_high": 1.1418427313716857,
+      "terminal_fraction_hat": 0.39465703677596936,
+      "terminal_fraction_ci_low": 0.3192302245696416,
+      "terminal_fraction_ci_high": 0.5135333258237911
+    },
+    {
+      "dataset": "Qwen2.5-7B / RTX 4090",
+      "n_bootstrap": 5000,
+      "beta_hat": 0.5673228174680077,
+      "beta_ci_low": 0.40190392496618055,
+      "beta_ci_high": 0.7142195719171152,
+      "terminal_fraction_hat": 0.5670414819822224,
+      "terminal_fraction_ci_low": 0.48957404007269434,
+      "terminal_fraction_ci_high": 0.6690450211256964
+    }
+  ]
+}

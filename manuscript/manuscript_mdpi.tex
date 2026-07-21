@@ -1,0 +1,695 @@
+
+% Future Internet manuscript converted to the current MDPI command structure.
+% Compile with the official Definitions folder distributed in the current
+% MDPI ACS LaTeX template.
+\documentclass[futureinternet,article,submit,moreauthors]{Definitions/mdpi}
+
+\usepackage{bm}
+\usepackage{placeins}
+
+\firstpage{1}
+\makeatletter
+\setcounter{page}{\@firstpage}
+\makeatother
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\datereceived{}
+\daterevised{}
+\dateaccepted{}
+\datepublished{}
+\hreflink{}
+
+\Title{Evidence-Gated Cloud--Edge LLM Serving with Delayed Activation}
+\TitleCitation{Evidence-Gated Cloud--Edge LLM Serving with Delayed Activation}
+
+\Author{Abdulaziz M. D. Aljohani $^{1,*}$ and Khaled M. Alhawiti $^{1}$}
+\AuthorNames{Abdulaziz M. D. Aljohani and Khaled M. Alhawiti}
+\AuthorCitation{Aljohani, A.M.D.; Alhawiti, K.M.}
+
+\address{%
+$^{1}$ \quad Faculty of Computers and Information Technology, University of Tabuk,
+Tabuk 47512, Saudi Arabia; a-aljohani@ut.edu.sa (A.M.D.A.);
+khalhawiti@ut.edu.sa (K.M.A.)}
+
+\corres{Correspondence: a-aljohani@ut.edu.sa}
+
+\abstract{Cloud--edge LLM services that keep sensitive requests local must coordinate finite edge capacity, delayed remote startup, and cloud-use cost under bursty demand. We formulate this problem as selection among 190 activation--release threshold policies. Diffusion-Residual Bayesian Guarded Search (DR-BGS) combines a reflected-diffusion prior, structural anchors, and a fixed high-fidelity budget in a compound-jump simulator. Across 36 exhaustively evaluated synthetic scenarios, evaluating 20 policies reduces high-fidelity replications by 88.77\%. All 180 scenario--initialization selections remain within 1\% of exhaustive training selection on independent holdout streams, with 0.348\% maximum excess. A chronologically split BurstGPT-derived study separates nomination from independent risk certification. Under 2\% protected-request and 5\% eligible-request blocking limits, all 120 method runs abstain, while exhaustive auditing finds no certifiable pair among 2,280 policy--scenario combinations at the original loads. In the locked seven-day replication, the high-load result is reproduced and all 18 distinct low-load pairs pass two independent 1,200-replay batches. The workflow supports efficient nomination, operating-envelope diagnosis, and abstention when the declared risk target is unsupported. Claims remain conditional on the simulator and replay model; production safety is not established.}
+
+\keyword{cloud--edge computing; LLM serving; delayed activation;
+simulation optimization; multi-fidelity modeling; risk certification}
+
+\newcommand{\Aset}{\mathcal{A}}
+\newcommand{\safeincludegraphics}[2][]{%
+  \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
+    \fbox{\parbox[c][28mm][c]{0.86\linewidth}{\centering
+      Missing figure file: \texttt{\detokenize{#2}}}}}}
+
+\begin{document}
+
+\section{Introduction}
+\label{sec:intro}
+
+Hybrid cloud--edge LLM serving can keep protected requests on premises while allowing eligible traffic to use remote capacity. The activation decision is nontrivial because local throughput varies with batching, active-sequence count, and KV-cache pressure \cite{kwon2023pagedattention,patel2024splitwise,zhong2024distserve,agrawal2024sarathi}, whereas remote service may require model loading or container startup before it becomes available \cite{serverlessllm2024}. Late activation increases local blocking and latency; early activation pays for capacity that may not be needed.
+
+Existing serving systems mainly optimize memory management, scheduling, execution placement, or per-request routing \cite{alpaserve2023,llumnix2024,mooncake2025,frugalgpt2024,routellm2025}. Privacy-aware and QoS-aware cloud--edge routing has also been studied \cite{prism2026,qosrouting2025,consroute2026}. The problem considered here combines a different set of decisions: privacy-restricted routing, finite and state-dependent local capacity, delayed cloud activation, costly evaluation of threshold policies, and independent evidence for the final operational statement.
+
+The controller uses an activation threshold $\alpha_{\rm on}$ and a release threshold $\alpha_{\rm off}$:
+\[
+0<\alpha_{\rm off}\leq\alpha_{\rm on}<K,
+\]
+where $K$ is local pressure capacity. A 19-level triangular grid yields 190 admissible policies. Figure~\ref{fig:workflow} summarizes the operational and evidence flows.
+
+\begin{figure}[t]
+\centering
+\safeincludegraphics[width=.94\linewidth]{figures/system_architecture_workflow.pdf}
+\caption{Cloud--edge architecture and evidence flow. Protected requests remain local. Eligible requests may use delayed remote capacity under a two-threshold controller. Budgeted multi-fidelity search nominates a policy; independent later-pool simulation then certifies the declared risk condition or returns abstention.}
+\label{fig:workflow}
+\end{figure}
+
+The high-fidelity model is a compound-jump event simulator with whole-request admission, finite local pressure, delayed activation, and two privacy classes. DR-BGS evaluates a stationary reflected diffusion over all policies, uses structural anchors to cover the triangular space, and learns high-fidelity residuals with a Gaussian process. Only 20 policies receive high-fidelity training simulation.
+
+The search model nominates a policy but does not certify it. Independent later-pool replays test prespecified blocking-risk conditions using simultaneous one-sided exact binomial bounds. Failure of either bound produces abstention. This is post-selection simulation certification, not safe exploration \cite{sui2015safeopt}.
+
+The contributions are:
+\begin{enumerate}
+\item a cloud--edge threshold-control model with privacy-restricted routing and delayed remote activation;
+\item a guarded multi-fidelity search over 190 activation--release policies;
+\item equal-budget evaluation against exhaustive training selection, controlled baselines, and same-anchor ablations; and
+\item chronological post-selection risk auditing, exhaustive feasibility diagnosis, and a locked seven-day replication.
+\end{enumerate}
+
+Across 36 exhaustive synthetic scenarios, DR-BGS reduces high-fidelity work by 88.77\%, and all 180 selections remain within 1\% of exhaustive training selection on independent holdout streams. At the original trace-derived loads, exhaustive auditing finds no certifiable alternative among 2,280 policy--scenario pairs. At a separately fixed low-load point, all distinct nominations pass two independent 1,200-replay batches. The result is an evidence-gated workflow, not a production-safety claim.
+
+\section{Related work and novelty boundary}
+\label{sec:related}
+
+PagedAttention, Splitwise, DistServe, and Sarathi-Serve improve memory management, phase placement, and throughput--latency tradeoffs in LLM serving \cite{kwon2023pagedattention,patel2024splitwise,zhong2024distserve,agrawal2024sarathi}. AlpaServe, Llumnix, Mooncake, FrugalGPT, and RouteLLM extend this space through multiplexing, migration, cache-centric serving, and model or endpoint selection \cite{alpaserve2023,llumnix2024,mooncake2025,frugalgpt2024,routellm2025}. PRISM, QoS-aware routing, and ConsRoute address privacy, service quality, and cloud--edge--device routing \cite{prism2026,qosrouting2025,consroute2026}. Their primary decisions concern request placement, model choice, or available serving resources. Here the policy governs when initially unavailable remote capacity is prepared and released.
+
+Simulation optimization includes finite-alternative selection, ranking and selection, metamodeling, and budget allocation \cite{amaran2016review,boesel2003cleanup,chick2001crn,chen2008subset}. Gaussian-process optimization and multi-fidelity discrepancy modeling provide general tools for expensive objectives \cite{jones1998ego,snoek2012bo,kennedy2000multifidelity,mikkola2023rmfbo,fan2024imfbo}. DR-BGS is not a new general Bayesian-optimization framework. It specializes an affine mechanistic trend plus residual GP to a compound-jump/diffusion pair and adds fixed anchors for the ordered triangular policy space.
+
+Safe and constrained Bayesian optimization restricts sampled points or models expensive feasibility constraints during search \cite{gardner2014constrained,sui2015safeopt,lubsen2024safemultitask}. The present certification stage is different: search may evaluate policies that would never be deployed, and the final claim is based on independent high-fidelity replays rather than GP uncertainty.
+
+BurstGPT supplies timestamp and token-length traces from production LLM workloads \cite{burstgpt2025}. This study uses fixed chronological subsets, but privacy labels, pressure conversion, and replay sampling remain modeled. The contribution lies in combining delayed-capacity control, guarded multi-fidelity search, exhaustive equal-budget comparison, and chronological post-selection risk auditing with explicit abstention. We do not claim the first cloud--edge router, a new reflected-diffusion theorem, cryptographic privacy, or production safety.
+
+\section{Materials and Methods}
+\label{sec:methods}
+
+\subsection{Cloud--edge system}
+
+Requests belong to a protected class $H$, which must remain local, or an eligible class $L$, which may use remote service after activation. Nominal class arrivals are Poisson with rates $\nu_H$ and $\nu_L$; bursty and trace-derived streams are used in robustness studies. A locally admitted class-$k$ request adds a pressure jump $J_k\sim F_k$ with mean $m_k$ and second moment $m_k^{(2)}$.
+
+The local state $X(t)\in[0,K]$ is an aggregate workload-pressure index, not a request or cache-block count. Service in cloud phase $n\in\{0,1,2\}$ follows
+\[
+s_n(x)=s_{0,n}\exp(-\beta_n x/K).
+\]
+The phases denote remote service inactive, activation in progress, and active. Protected requests are always offered locally. Eligible requests are local in phases 0 and 1 and remote in phase 2. Rejected requests are not retried, and remote queueing is outside the model.
+
+For policy $a=(\alpha_{\rm on},\alpha_{\rm off})$, the low-fidelity switching generator is
+\[
+T_a(x)=
+\begin{pmatrix}
+-\gamma_a(x)&\gamma_a(x)&0\\
+0&-\theta&\theta\\
+\mu_a(x)&0&-\mu_a(x)
+\end{pmatrix},
+\]
+with
+\[
+\gamma_a(x)=\nu_L\mathbf 1_{\{x\geq\alpha_{\rm on}\}},
+\qquad
+\mu_a(x)=\bar\mu_c\mathbf 1_{\{x<\alpha_{\rm off}\}}.
+\]
+Activation completes after mean delay $1/\theta$; release becomes possible below $\alpha_{\rm off}$.
+
+The reference simulator evolves pressure by
+\[
+dX(t)=-s_{N(t)}(X(t))\,dt+
+\sum_{k\in\mathcal K_{N(t)}}J_k\,dA_k(t),
+\]
+where
+\[
+\mathcal K_0=\mathcal K_1=\{H,L\},
+\qquad
+\mathcal K_2=\{H\}.
+\]
+Whole-request admission accepts a local request only if $X(t^-)+J_k\leq K$. An eligible overflow while remote service is unavailable is rejected and starts activation even below $\alpha_{\rm on}$. This overflow trigger is absent from the diffusion screen.
+
+\subsection{Stationary diffusion screen}
+
+Replacing request jumps by their first two infinitesimal moments gives
+\[
+b_n(x)=-s_n(x)+\sum_{k\in\mathcal K_n}\nu_km_k,
+\qquad
+a_n=\sum_{k\in\mathcal K_n}\nu_km_k^{(2)},
+\]
+and the reflected switching diffusion
+\[
+dX(t)=b_{N(t)}(X(t))\,dt+\sqrt{a_{N(t)}}\,dB(t)+dL_0(t)-dL_K(t).
+\]
+Reflection is used only in the low-fidelity screen; the reference simulator rejects overshooting requests.
+
+For fixed $a$, the stationary phase-density row vector
+$\boldsymbol{\pi}^a=(\pi_0^a,\pi_1^a,\pi_2^a)$ satisfies, between thresholds,
+\[
+-\frac{d}{dx}\!\left[\boldsymbol{\pi}^a B\right]
++\frac12\frac{d^2}{dx^2}\!\left[\boldsymbol{\pi}^a A\right]
++\boldsymbol{\pi}^aT_a=\boldsymbol 0,
+\]
+with zero boundary flux, weak interface balance, and unit mass. Standard reflected switching-diffusion results support the fixed-policy invariant characterization under the stated regularity and irreducibility assumptions \cite{jang2008reflected,yin2010hybrid,shao2018invariant,kang2014stationary}; no new general theorem is claimed.
+
+The screen computes approximate pressure delay $W_D$, protected and eligible losses $B_{H,D},B_{L,D}$, and cloud-active fraction $R_{C,D}$. For Poisson arrivals, arrival-seen probabilities use PASTA \cite{wolff1982pasta}. The objective is
+\[
+J_D(a)=c_WW_D(a)+c_HB_{H,D}(a)+c_LB_{L,D}(a)+c_CR_{C,D}(a).
+\]
+A nearest-neighbour continuous-time Markov chain discretizes the diffusion, and a sparse stationary solve is applied to all 190 policies. Numerical residual and grid-refinement checks assess the solver, not agreement with the jump simulator \cite{budhiraja2014numerical,gardiner2009stochastic}.
+
+\subsection{DR-BGS policy search}
+
+Let $E_t$ be the high-fidelity policies evaluated by iteration $t$. The diffusion surface is recalibrated by
+\[
+(\widehat b_{0,t},\widehat b_{1,t})
+\in\arg\min_{b_0,b_1}\sum_{a\in E_t}
+[\overline Y_J(a)-b_0-b_1J_D(a)]^2,
+\]
+giving trend $m_{0,t}(a)=\widehat b_{0,t}+\widehat b_{1,t}J_D(a)$. A Mat\'ern-$5/2$ GP models residuals
+$r_t(a)=\overline Y_J(a)-m_{0,t}(a)$ over normalized threshold coordinates. The next unevaluated policy minimizes
+\[
+\operatorname{LCB}_t(a)=m_{0,t}(a)+\widehat r_t(a)-\beta_ts_t(a),
+\qquad
+\beta_t=2+0.25\log(1+t).
+\]
+
+The initial design includes fixed corner, diagonal, and intermediate anchors plus the three lowest diffusion policies. Duplicates are removed and maximin points complete an eight-policy design. The anchors guard search-space coverage; they do not enforce safety. Sequential acquisition stops after 20 distinct policies.
+
+Each evaluated policy receives 20 common-random-number training replications. The lowest observed training mean is nominated and receives 30 independent holdout replications. Thus
+\[
+N_{\rm DR-BGS}=20\times20+30=430,
+\qquad
+N_{\rm exhaustive}=190\times20+30=3830.
+\]
+The principal ablation is a guarded GP with the same anchors and budget but no diffusion residual.
+
+\subsection{Independent certification}
+
+In the trace study, search minimizes
+\[
+C(a)=R_C(a)+0.15W(a)
+\]
+subject to training-mean limits $B_H\leq0.02$ and $B_L\leq0.05$. If no evaluated policy is nominally feasible, a fixed penalized objective returns a nomination without declaring it feasible.
+
+Certification uses 150 independent later-pool replays. For each constraint, a Bernoulli indicator records whether the replay's blocking rate exceeds its 2\% or 5\% limit. One-sided Clopper--Pearson upper bounds use tail probability 0.025 per constraint \cite{clopper1934}. The policy is certified only if
+\[
+U_H\leq0.10,\qquad U_L\leq0.10;
+\]
+otherwise the procedure abstains. Bonferroni allocation gives at least 95\% simultaneous confidence under independent replays from the declared generator. The statement is simulator-conditional and does not imply safe exploration or production safety.
+
+\subsection{Experimental Protocol}
+\label{sec:design}
+
+The study separates development, holdout evaluation, chronological certification, exploratory diagnosis, and locked confirmation in line with simulation V\&V practice \cite{sargent2013validation,law2015simulation}.
+
+\paragraph{Synthetic benchmark.}
+The development set contains 36 exhaustively evaluated scenarios: 12 maximin factorial cases and 24 Latin-hypercube cases. Factors vary offered load, burstiness, jump scale and variability, activation delay, privacy mix, service degradation, cloud price, release delay, and capacity. Training uses 20 common-random-number replications with a 225-unit warm-up and 900-unit horizon. The selected policy is assessed on 30 disjoint holdout replications with a 300-unit warm-up and 1,200-unit horizon. Five initialization seeds yield 180 selections per stochastic method.
+
+The exhaustive-training reference is
+\[
+a_{\rm ex,tr}\in\arg\min_{a\in\Aset_{19}}\overline Y_{\rm tr}(a),
+\]
+and holdout excess for nomination $\widehat a$ is
+\[
+R_{\rm ex}=\max\!\left\{0,
+\frac{\overline Y_{\rm hold}(\widehat a)-
+\overline Y_{\rm hold}(a_{\rm ex,tr})}
+{\overline Y_{\rm hold}(a_{\rm ex,tr})}\right\}.
+\]
+Equal-budget comparators include local search, random-subset ranking and selection, diffusion top-20, standard GP optimization, guarded GP, and a two-stage ranking-and-selection procedure.
+
+\paragraph{Independent scenario studies.}
+A locked 59-scenario study classifies a scenario as successful only if all five initializations satisfy $R_{\rm ex}\leq1\%$. A separately locked follow-up uses a prespecified 5\% practical-indifference threshold. Earlier unlocked collections remain descriptive.
+
+\paragraph{Chronological BurstGPT study.}
+The original study uses the first 100 chronological rows of the official trace; 95 positive-token records remain. The first 60 form the search pool and the later 35 the certification pool. Moving blocks of length eight resample timestamp gaps and token counts, and each replay contains 560 requests. The 12 scenarios cross
+\[
+\rho\in\{0.70,0.90\},\quad
+q_H\in\{0.20,0.50,0.80\},\quad
+\tau\in\{0.5,2.0\}.
+\]
+Privacy labels are synthetic because BurstGPT does not identify sensitivity.
+
+\paragraph{Operating envelope and confirmation.}
+After universal abstention, an exploratory campaign evaluates all 190 policies while varying load, capacity, delay, and certification batch size up to 1,200 replays. The interior point $K=40,\rho=0.05$ is then fixed before fresh result generation. Each distinct nomination is tested on two disjoint 1,200-replay batches under the unchanged gate.
+
+\paragraph{Seven-day replication.}
+A separately locked protocol uses 11,810 positive-token records from the first five days for search and 6,086 records from the next two days for later certification. The policy space, pressure transformation, risk rule, and method budgets remain unchanged.
+
+\paragraph{Service-law calibration.}
+Qwen2.5-7B is served with vLLM on an RTX 3090 at six concurrency levels with direct cache-related telemetry. The measurements calibrate the reduced-order service law, not the complete controller.
+
+Detailed protocol locks, trace transformation, numerical derivations, certification interpretation, scaling, hysteresis, and Pareto analyses are provided in the Supplementary Material and archived repository.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Numerical Fidelity and Fixed-Budget Selection}
+\label{sec:numerical-fidelity}
+
+The archived optimization surfaces were generated at 161 grid points. The numerical audit reported here uses 321 grid points and assesses further refinement to 641 points. The 321-point stationary solve has maximum probability-mass error $2.22\times10^{-16}$, maximum residual $1.43\times10^{-12}$, and no negative probabilities. Refining to 641 points changes the objective by 0.49\% in the median and 3.07\% at maximum. In contrast, the diffusion's recomputed median and 90th-percentile metric errors are 24.3\% and 64.1\%. It is therefore a search trend rather than a stand-alone risk estimator.
+
+Table~\ref{tab:optimizers} compares methods under the common 20-policy budget. DR-BGS and guarded GP are the only methods with all 180 selections within 1\% of exhaustive training selection. Their maximum excesses are 0.348\% and 0.878\%, showing that structural coverage supplies most of the reliability and the diffusion residual provides a smaller additional improvement.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Policy-selection performance under the common 20-policy high-fidelity budget.}
+\label{tab:optimizers}
+\begin{tabular}{lrrr}
+\toprule
+Method & Within 1\% & Within 5\% & Max. excess\\
+\midrule
+Local search & 13.89\% & 44.44\% & 34.02\%\\
+Random subset R\&S & 56.11\% & 87.22\% & 13.26\%\\
+Two-stage R\&S & 70.56\% & 96.11\% & 11.67\%\\
+Diffusion top-20 & 86.11\% & 91.67\% & 9.97\%\\
+Standard GP & 95.56\% & 98.89\% & 7.22\%\\
+Guarded GP & 100.00\% & 100.00\% & 0.878\%\\
+DR-BGS & 100.00\% & 100.00\% & 0.348\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\safeincludegraphics[width=.84\linewidth]{figures/optimizer_comparison.pdf}
+\caption{Maximum holdout excess under the common 20-policy budget. All seven methods listed in Table~\ref{tab:optimizers} are shown.}
+\label{fig:optimizer}
+\end{figure}
+
+Evaluating 20 rather than 190 policies reduces high-fidelity replications from 3,830 to 430, or 88.77\%.
+
+\subsection{Independent scenarios and chronological certification}
+
+In the strict locked study, 57 of 59 scenarios satisfy the 1\% criterion for all five initialization seeds. The exact one-sided 95\% lower bound is 89.71\%; the two failures have maximum excesses of 1.15\% and 3.49\%, and all 295 runs are within 5\%. The strict study therefore does not support a 95\% population-reliability claim at 1\%.
+
+The separately locked 5\% follow-up succeeds in all 59 scenarios, gives a 95.05\% one-sided lower bound, and has maximum excess 0.941\%. It is additional evidence, not a replacement for the stricter result.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Independent scenario and trace-derived evidence.}
+\label{tab:evidence}
+\begin{tabular}{llrr}
+\toprule
+Study & Criterion & Success & Bound / result\\
+\midrule
+Locked 59-scenario & 1\% excess & 57/59 & 89.71\% lower bound\\
+Locked follow-up & 5\% excess & 59/59 & 95.05\% lower bound\\
+Trace DR-BGS & absolute gate & 0/60 & abstain\\
+Trace guarded GP & absolute gate & 0/60 & abstain\\
+Paired DR-BGS & noninferiority & 50/60 & retrospective\\
+Paired guarded GP & noninferiority & 33/60 & retrospective\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The chronological BurstGPT experiment produces universal abstention under the absolute gate. For DR-BGS nominations, mean protected-request blocking across certification batches ranges from 12.7\% to 28.8\%, compared with the 2\% within-replay limit. The largest exact upper bound is at least 0.985 in every scenario. The retrospective paired audit certifies noninferiority to exhaustive training selection in 50/60 DR-BGS runs and 33/60 guarded-GP runs, but this reference requires exhaustive evaluation and is not deployable.
+
+\subsection{Operating-envelope diagnosis and seven-day replication}
+
+Exhaustive evaluation shows that universal abstention is not caused by a missed policy. At $K=40$ and $\rho\in\{0.70,0.90\}$, none of the 2,280 policy--scenario pairs satisfies the unchanged certification rule. Increasing the batch to 1,200 replays does not change the decision. Reducing mean activation delay to 0.10 certifies 0/12 scenarios, and increasing capacity through $K=240$ certifies 2/12. At baseline capacity, no load-only case certifies at $\rho\geq0.10$.
+
+After the exploratory study, the fixed point $K=40,\rho=0.05$ is evaluated with fresh seeds. All six DR-BGS pairs, 20 guarded-GP pairs, and six exhaustive-training pairs pass both 1,200-replay batches. Deduplication leaves 31 distinct pairs, all confirmed without batch reversal. The point requires a 92.9\%--94.4\% load reduction and is therefore diagnostic rather than prescriptive.
+
+The seven-day replication reproduces both sides of the result. None of 2,280 high-load policy--scenario pairs certifies; the smallest largest upper risk bound is 0.855. At the fixed low-load point, all 24 method-specific pairs pass both batches, leaving 18 distinct confirmed pairs after deduplication. The largest upper bound among them is 0.00307.
+
+\begin{figure}[t]
+\centering
+\safeincludegraphics[width=.88\linewidth]{figures/seven_day_robustness.png}
+\caption{Seven-day robustness replication. High-load best-policy risk bounds remain above the 0.10 budget, while all method-specific low-load pairs pass two disjoint 1,200-replay batches.}
+\label{fig:seven-day}
+\end{figure}
+
+Against practical reference policies, one prespecified DR-BGS initialization improves the median holdout objective by 30.96\% relative to local-only execution, 13.28\% relative to $(0.5K,0.5K)$, and 11.79\% relative to a fixed $(0.5K,0.4K)$ deadband. Against the strongest diagonal training policy, the median difference is $-0.38\%$, so strict hysteresis is not universally superior. A delay-aware design improves over a near-instantaneous design by 3.04\% in the median and 17.69\% at maximum.
+
+\subsection{Empirical Service-Law Grounding}
+\label{sec:calibration}
+
+The reduced-order law
+\[
+s_n(x)=s_{0,n}\exp(-\beta_nx/K)
+\]
+is grounded using Qwen2.5-7B on an RTX 3090 at six concurrency levels. The telemetry-derived predictor is mean vLLM GPU KV-cache usage, and the response is effective per-stream decode rate. The fitted relation is
+\[
+\widehat\mu(z)=53.6138\exp(-0.034451z),
+\]
+with $R^2=0.9961$, in-sample RMSE 0.789 tokens/s, and leave-one-level-out RMSE 1.299 tokens/s.
+
+\begin{figure}[t]
+\centering
+\safeincludegraphics[width=.72\linewidth]{figures/service_law_fit.png}
+\caption{Measured decode rate and fitted exponential service law for Qwen2.5-7B on the RTX 3090.}
+\label{fig:calibration}
+\end{figure}
+
+A 20,000-draw bootstrap maps to a normalized degradation interval of 1.159--1.358. The simulation uses the wider range 0.600--1.376 to include structural uncertainty. Additional RTX 4090 and Mistral measurements show the same qualitative decline but are not pooled because their telemetry protocols differ. The calibration supports the service-law shape and parameter range; it does not validate the 190-policy controller or certification gate.
+
+
+\subsection{Retrospective Analytical and Model-Form Validation}
+\label{sec:analytical-validation}
+
+A post hoc validation campaign was conducted after the primary results were
+available. It was not preregistered. The analysis independently reimplemented
+the archived DR-BGS surface experiment, derived jump-approximation error
+indicators, compared service-law forms and hardware/model domains, stressed
+the low-fidelity surface, and triangulated the stationary solver.
+
+The independent DR-BGS implementation reproduces the primary result: all 180
+selections remain within 1\% of exhaustive training selection, with
+0.348\% maximum holdout excess. The same-anchor guarded GP reproduces
+its 0.878\% maximum. Across the 36 exhaustive surfaces, the median
+diffusion/holdout Spearman correlation is 0.989, even though the median
+scenario-level absolute objective error is 33.4\%. This surface-level objective error is distinct from the pooled per-metric median error of 24.3\% reported in Section~\ref{sec:numerical-fidelity}. The exhaustive
+training optimum lies in the diffusion top 20 in 86.1\% of scenarios.
+These results support the diffusion's use as a search trend, not as a
+stand-alone selector or risk model.
+
+For the direct RTX 3090 telemetry, the exponential service law is preferred
+to linear, reciprocal, and quadratic alternatives by AICc or
+leave-one-level-out prediction. Its decay coefficient has a 10,000-draw
+bootstrap 95\% interval of 0.03326--0.03567. Normalized decode-rate curves
+for Qwen/RTX 3090, Mistral/RTX 3090, and Qwen/RTX 4090 are strictly decreasing
+and have pairwise RMSE 0.067--0.133. The common trend is therefore
+more transferable than a common coefficient.
+
+\begin{figure}[t]
+\centering
+\safeincludegraphics[width=.84\linewidth]{figures/cross_hardware_transport.pdf}
+\caption{Normalized service degradation across two models and two GPUs. The
+shared decreasing form is stable, but degradation strength remains
+hardware- and model-dependent.}
+\label{fig:cross-hardware}
+\end{figure}
+
+An independent 161-point CTMC reimplementation matches the archived
+161-point objectives with median relative discrepancy below $10^{-4}$\%
+and maximum discrepancy 0.608\%. Refining the same 18 policy cases from
+161 to 321 grid points changes the objective by a median 1.17\%. A separate reflected-diffusion Monte Carlo solver differs
+from the 321-point CTMC by median 2.52\% and maximum 6.67\%.
+
+Finally, monotone transformations and smooth perturbations of the
+low-fidelity surface retain a within-5\% selection rate of 100\% across all
+tested variants. The strongest smooth perturbation has maximum holdout excess
+4.29\%. These checks strengthen analytical, implementation, and
+model-form credibility. They do not constitute end-to-end controller
+execution, hardware-in-the-loop validation, or production-safety evidence.
+
+\section{Discussion}
+\label{sec:discussion}
+
+The fixed-budget results separate the contributions of structural coverage and mechanistic residualization. The same-anchor guarded GP already limits maximum excess to 0.878\%, whereas DR-BGS reduces it to 0.348\%. Thus, boundary and diagonal coverage are the main defense against poor finite-budget selections; the diffusion contributes a smaller but measurable ranking improvement despite its substantial absolute metric error.
+
+The synthetic and chronological studies answer different questions. The first asks whether budgeted search approximates exhaustive training selection. The second asks whether the nominated policy supports an absolute risk statement on later data. Near-optimal nomination does not imply feasibility: a method may find the best policy in a family even when the entire family violates the operating requirement. Independent certification prevents a relative optimization result from becoming an unsupported absolute claim.
+
+Abstention is informative only when its cause is examined. In principle it may reflect a poor nomination, an infeasible policy family, or insufficient evidence. Here, exhaustive evaluation rules out a missed certifiable alternative at the high-load points, and increasing the replay count rules out the original sample size as the main explanation. Under the declared simulator and policy family, those operating points fall outside the supported region. This remains conditional on the modeled architecture; a different controller or larger action space could behave differently.
+
+The low-load confirmations show that the same gate can return positive decisions. They do not make $\rho=0.05$ a deployment recommendation. Instead, the contrast between high-load abstention and low-load certification identifies a modeled operating envelope and demonstrates why capacity planning should precede controller tuning.
+
+Three system implications follow. First, delayed remote activation is a slower-timescale resource-allocation decision, not only a per-request routing choice. Second, an imperfect mechanistic model can still guide expensive simulation when combined with structural coverage and high-fidelity correction. Third, policy nomination and operational acceptance should use separate evidence.
+
+The main limitations are the reduced-order pressure state, synthetic privacy labels, modeled remote service, and simulator-conditional certification. The simulator omits remote queueing, network congestion, scheduler-specific preemption, prefix sharing, request cancellation, and classification error. The moving-block replay preserves short local sequences but not all long-range dependence, and the seven-day window is not the full BurstGPT release. Hardware measurements and the retrospective transport analysis ground the service-law form, but they do not validate end-to-end controller transfer. Future work may consider richer policy families, finite remote queues, sequential certification, drift monitoring, and live cloud--edge evaluation; none is required for the present simulation-based claim.
+
+\section{Conclusions}
+\label{sec:conclusion}
+
+DR-BGS combines diffusion screening, structural coverage, residual GP modeling, and a fixed compound-jump simulation budget for delayed cloud activation. Evaluating 20 of 190 policies reduces high-fidelity work by 88.77\%, while all 180 synthetic-benchmark selections remain within 1\% of exhaustive training selection on independent holdout streams.
+
+Chronological certification gives a different result: at the original loads, all method runs abstain and exhaustive evaluation finds no certifiable alternative among 2,280 policy--scenario pairs. At a separately fixed low-load point, all distinct nominations pass two independent 1,200-replay batches, and a locked seven-day study reproduces the same high-load/low-load contrast.
+
+The contribution is an evidence-gated cloud--edge workflow that nominates policies efficiently, diagnoses whether the tested operating regime contains a certifiable alternative, and abstains when independent evidence does not support the declared risk target. Retrospective analytical and model-form checks independently reproduce the optimizer result and strengthen the reduced-order model's validation boundary. The conclusion is conditional on the simulator, policy family, trace transformation, and replay model; production safety is not established.
+
+
+\vspace{6pt}
+
+\supplementary{The following supporting information accompanies the manuscript:
+Supplementary Material S1, \textit{Expanded Technical and Validation Details}
+(PDF and LaTeX source); Supplementary Software Archive S2, a clean software,
+data, results, protocol, and audit snapshot corresponding to the manuscript.}
+
+\authorcontributions{Conceptualization, A.M.D.A. and K.M.A.; methodology,
+A.M.D.A. and K.M.A.; software, A.M.D.A.; validation, A.M.D.A. and K.M.A.;
+formal analysis, A.M.D.A.; investigation, A.M.D.A.; data curation, A.M.D.A.;
+writing---original draft preparation, A.M.D.A.; writing---review and editing,
+A.M.D.A. and K.M.A.; visualization, A.M.D.A. All authors have read and agreed
+to the published version of the manuscript.}
+
+\funding{This research received no external funding.}
+
+\institutionalreview{Not applicable. The study used publicly released workload
+metadata and synthetic simulation experiments.}
+
+\informedconsent{Not applicable.}
+
+\dataavailability{A clean software and data snapshot corresponding to this
+manuscript is supplied as Supplementary Software Archive S2. The historical
+experiment archive is publicly available in the GitHub repository at
+\url{https://github.com/AMD-Aljohani/dr-bgs-llm-routing}, release
+\url{https://github.com/AMD-Aljohani/dr-bgs-llm-routing/releases/tag/v1.1.0},
+and in the Zenodo archive at
+\url{https://doi.org/10.5281/zenodo.21434924}. Calibration data are available
+at \url{https://github.com/AMD-Aljohani/vllm-calibration-sweeps} and
+\url{https://doi.org/10.5281/zenodo.21194313}.}
+
+\useofartificialintelligence{Generative-AI tools assisted with language
+editing, LaTeX organization, code review, and cross-file consistency checks.
+The authors reviewed all affected material and take full responsibility for
+the manuscript. The tools did not replace the archived simulation runs,
+mathematical analysis, reference verification, or interpretation.}
+
+\acknowledgments{The authors acknowledge the University of Tabuk, Saudi Arabia,
+for academic and institutional support.}
+
+\conflictsofinterest{The authors declare no conflicts of interest.}
+
+\reftitle{References}
+\begin{thebibliography}{999}
+
+\bibitem{kwon2023pagedattention}
+W. Kwon, Z. Li, S. Zhuang, Y. Sheng, L. Zheng, C.H. Yu, J.E. Gonzalez, H. Zhang, I. Stoica,
+Efficient memory management for large language model serving with PagedAttention,
+in: Proceedings of the 29th ACM Symposium on Operating Systems Principles, 2023, pp. 611--626.
+
+\bibitem{patel2024splitwise}
+P. Patel, E. Choukse, C. Zhang, A. Shah, I. Goiri, S. Maleki, R. Bianchini,
+Splitwise: Efficient generative LLM inference using phase splitting,
+in: 2024 ACM/IEEE 51st Annual International Symposium on Computer Architecture, 2024, pp. 118--132.
+\newblock \url{https://doi.org/10.1109/ISCA59077.2024.00019}.
+
+\bibitem{zhong2024distserve}
+Y. Zhong, S. Liu, J. Chen, J. Hu, Y. Zhu, X. Liu, X. Jin, H. Zhang,
+DistServe: Disaggregating prefill and decoding for goodput-optimized large language model serving,
+in: 18th USENIX Symposium on Operating Systems Design and Implementation, 2024, pp. 193--210.
+
+\bibitem{agrawal2024sarathi}
+A. Agrawal, N. Kedia, A. Panwar, J. Mohan, N. Kwatra, B. Gulavani, A. Tumanov, R. Ramachandran,
+Taming throughput--latency tradeoff in LLM inference with Sarathi-Serve,
+in: 18th USENIX Symposium on Operating Systems Design and Implementation, 2024, pp. 117--134.
+
+\bibitem{serverlessllm2024}
+Y. Fu, L. Xue, Y. Huang, A.-O. Brabete, D. Ustiugov, Y. Patel, L. Mai,
+ServerlessLLM: Low-latency serverless inference for large language models,
+in: 18th USENIX Symposium on Operating Systems Design and Implementation, 2024, pp. 135--153.
+
+\bibitem{alpaserve2023}
+Z. Li, L. Zheng, Y. Zhong, V. Liu, Y. Sheng, X. Jin, Y. Huang, Z. Chen, H. Zhang, J.E. Gonzalez, I. Stoica,
+AlpaServe: Statistical multiplexing with model parallelism for deep learning serving,
+in: 17th USENIX Symposium on Operating Systems Design and Implementation, 2023, pp. 663--679.
+
+\bibitem{llumnix2024}
+B. Sun, Z. Huang, H. Zhao, W. Xiao, X. Zhang, Y. Li, W. Lin,
+Llumnix: Dynamic scheduling for large language model serving,
+in: 18th USENIX Symposium on Operating Systems Design and Implementation, 2024, pp. 173--191.
+
+\bibitem{mooncake2025}
+R. Qin, Z. Li, W. He, J. Cui, F. Ren, M. Zhang, Y. Wu,
+W. Zheng, X. Xu,
+Mooncake: Trading More Storage for Less Computation---A
+KVCache-centric Architecture for Serving LLM Chatbot,
+in: 23rd USENIX Conference on File and Storage Technologies
+(FAST 25), USENIX Association, 2025, pp. 155--170.
+
+\bibitem{frugalgpt2024}
+L. Chen, M. Zaharia, J. Zou,
+FrugalGPT: How to use large language models while reducing cost and improving performance,
+Transactions on Machine Learning Research (2024).
+
+\bibitem{routellm2025}
+I. Ong, A. Almahairi, V. Wu, W.-L. Chiang, T. Wu, J.E. Gonzalez, M.W. Kadous, I. Stoica,
+RouteLLM: Learning to route LLMs from preference data,
+in: International Conference on Learning Representations, 2025.
+
+\bibitem{prism2026}
+J. Zhan, H. Shen, Z. Lin, T. He,
+PRISM: Privacy-aware routing for adaptive cloud--edge LLM inference via semantic sketch collaboration,
+Proceedings of the AAAI Conference on Artificial Intelligence 40(33) (2026) 28150--28158.
+\newblock \url{https://doi.org/10.1609/aaai.v40i33.40041}.
+
+\bibitem{qosrouting2025}
+J. Yang, Q. Wu, Z. Feng, Z. Zhou, D. Guo, X. Chen,
+Quality-of-service aware LLM routing for edge computing with multiple experts,
+IEEE Transactions on Mobile Computing 24 (12) (2025) 13648--13662.
+\newblock \url{https://doi.org/10.1109/TMC.2025.3590969}.
+
+\bibitem{consroute2026}
+H. Qiao, H. Zhang, S. Mao, S. Cheng, J. Liu,
+ConsRoute: Consistency-aware adaptive query routing for cloud--edge--device large language models,
+arXiv:2603.21237 (2026).
+\newblock \url{https://arxiv.org/abs/2603.21237}.
+
+\bibitem{burstgpt2025}
+Y. Wang, Y. Chen, Z. Li, X. Kang, Y. Fang, Y. Zhou, Y. Zheng, Z. Tang,
+X. He, R. Guo, X. Wang, Q. Wang, A.C. Zhou, X. Chu,
+BurstGPT: A real-world workload dataset to optimize LLM serving systems,
+in: Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining, vol. 2, 2025, pp. 5831--5841.
+\newblock \url{https://doi.org/10.1145/3711896.3737413}.
+
+\bibitem{anick1982stochastic}
+D. Anick, D. Mitra, M.M. Sondhi,
+Stochastic theory of a data-handling system with multiple sources,
+Bell System Technical Journal 61 (8) (1982) 1871--1894.
+
+\bibitem{fischer1993mmpp}
+W. Fischer, K. Meier-Hellstern,
+The Markov-modulated Poisson process (MMPP) cookbook,
+Performance Evaluation 18 (2) (1993) 149--171.
+
+\bibitem{jang2008reflected}
+B.-G. Jang, G. Shim,
+A reflected diffusion process in a regime-switching environment,
+Operations Research Letters 36 (2) (2008) 177--183.
+\newblock \url{https://doi.org/10.1016/j.orl.2007.05.014}.
+
+\bibitem{yin2010hybrid}
+G. Yin, C. Zhu,
+Hybrid Switching Diffusions: Properties and Applications,
+Springer, New York, 2010.
+
+\bibitem{shao2018invariant}
+J. Shao,
+Invariant measures and Euler--Maruyama's approximations of
+state-dependent regime-switching diffusions,
+SIAM Journal on Control and Optimization 56 (5) (2018) 3215--3238.
+\newblock \url{https://doi.org/10.1137/18M116678X}.
+
+\bibitem{kang2014stationary}
+W. Kang, K. Ramanan,
+Characterization of stationary distributions of reflected diffusions,
+Annals of Applied Probability 24 (4) (2014) 1329--1374.
+
+\bibitem{budhiraja2014numerical}
+A. Budhiraja, J. Chen, S. Rubenthaler,
+A numerical scheme for invariant distributions of constrained diffusions,
+Mathematics of Operations Research 39 (2) (2014) 262--289.
+\newblock \url{https://doi.org/10.1287/moor.2013.0599}.
+
+\bibitem{gardiner2009stochastic}
+C. Gardiner,
+Stochastic Methods: A Handbook for the Natural and Social Sciences, 4th ed.,
+Springer, Berlin, 2009.
+
+\bibitem{wolff1982pasta}
+R.W. Wolff,
+Poisson arrivals see time averages,
+Operations Research 30 (2) (1982) 223--231.
+\newblock \url{https://doi.org/10.1287/opre.30.2.223}.
+
+\bibitem{amaran2016review}
+S. Amaran, N.V. Sahinidis, B. Sharda, S.J. Bury,
+Simulation optimization: A review of algorithms and applications,
+Annals of Operations Research 240 (2016) 351--380.
+\newblock \url{https://doi.org/10.1007/s10479-015-2019-x}.
+
+\bibitem{boesel2003cleanup}
+J. Boesel, B.L. Nelson, S.-H. Kim,
+Using ranking and selection to ``clean up'' after simulation optimization,
+Operations Research 51 (5) (2003) 814--825.
+\newblock \url{https://doi.org/10.1287/opre.51.5.814.16751}.
+
+\bibitem{chick2001crn}
+S.E. Chick, K. Inoue,
+New procedures to select the best simulated system using common random numbers,
+Management Science 47 (8) (2001) 1133--1149.
+\newblock \url{https://doi.org/10.1287/mnsc.47.8.1133.10229}.
+
+\bibitem{chen2008subset}
+C.-H. Chen, D. He, M.C. Fu, L.H. Lee,
+Efficient simulation budget allocation for selecting an optimal subset,
+INFORMS Journal on Computing 20 (4) (2008) 579--595.
+\newblock \url{https://doi.org/10.1287/ijoc.1080.0268}.
+
+\bibitem{jones1998ego}
+D.R. Jones, M. Schonlau, W.J. Welch,
+Efficient global optimization of expensive black-box functions,
+Journal of Global Optimization 13 (1998) 455--492.
+\newblock \url{https://doi.org/10.1023/A:1008306431147}.
+
+\bibitem{snoek2012bo}
+J. Snoek, H. Larochelle, R.P. Adams,
+Practical Bayesian optimization of machine learning algorithms,
+in: Advances in Neural Information Processing Systems 25, 2012, pp. 2951--2959.
+
+\bibitem{kennedy2000multifidelity}
+M.C. Kennedy, A. O'Hagan,
+Predicting the output from a complex computer code when fast approximations are available,
+Biometrika 87 (1) (2000) 1--13.
+\newblock \url{https://doi.org/10.1093/biomet/87.1.1}.
+
+\bibitem{mikkola2023rmfbo}
+P. Mikkola, J. Martinelli, L. Filstroff, S. Kaski,
+Multi-fidelity Bayesian optimization with unreliable information sources,
+in: Proceedings of the 26th International Conference on Artificial Intelligence and Statistics,
+Proceedings of Machine Learning Research 206 (2023) 7425--7454.
+\newblock \url{https://proceedings.mlr.press/v206/mikkola23a.html}.
+
+\bibitem{fan2024imfbo}
+M. Fan, B.-J. Yoon, E. Dougherty, N. Urban, F. Alexander, R. Arr\'oyave, X. Qian,
+Multi-fidelity Bayesian optimization with multiple information sources of input-dependent fidelity,
+in: Proceedings of the 40th Conference on Uncertainty in Artificial Intelligence,
+Proceedings of Machine Learning Research 244 (2024) 1271--1293.
+\newblock \url{https://proceedings.mlr.press/v244/fan24a.html}.
+
+\bibitem{gardner2014constrained}
+J. Gardner, M. Kusner, Z. Xu, K. Weinberger, J. Cunningham,
+Bayesian optimization with inequality constraints,
+in: Proceedings of the 31st International Conference on Machine Learning, 2014, pp. 937--945.
+
+\bibitem{sui2015safeopt}
+Y. Sui, A. Gotovos, J. Burdick, A. Krause,
+Safe exploration for optimization with Gaussian processes,
+in: Proceedings of the 32nd International Conference on Machine Learning, 2015, pp. 997--1005.
+
+\bibitem{lubsen2024safemultitask}
+J. L{\"u}bsen, C. Hespe, A. Eichler,
+Towards safe multi-task Bayesian optimization,
+in: Proceedings of the 6th Annual Learning for Dynamics and Control Conference, 2024, pp. 839--851.
+
+\bibitem{clopper1934}
+C.J. Clopper, E.S. Pearson,
+The use of confidence or fiducial limits illustrated in the case of the binomial,
+Biometrika 26 (4) (1934) 404--413.
+\newblock \url{https://doi.org/10.1093/biomet/26.4.404}.
+
+\bibitem{sargent2013validation}
+R.G. Sargent,
+Verification and validation of simulation models,
+Journal of Simulation 7 (1) (2013) 12--24.
+\newblock \url{https://doi.org/10.1057/jos.2012.20}.
+
+\bibitem{law2015simulation}
+A.M. Law,
+Simulation Modeling and Analysis, 5th ed.,
+McGraw-Hill Education, New York, 2015.
+
+\end{thebibliography}
+
+\PublishersNote{}
+\end{document}

@@ -1,5 +1,0 @@
-- DR-BGS evaluates 20 of 190 policies and reduces high-fidelity work by 88.77%.
-- All 180 synthetic selections remain within 1% of exhaustive training selection.
-- The strict trace-derived gate abstains in all 120 method runs.
-- Exhaustive audits find 0/2,280 certifiable high-load pairs on both trace bases.
-- A locked seven-day replication confirms all 18 distinct low-load pairs.

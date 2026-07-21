@@ -1,0 +1,90 @@
+[
+  {
+    "variant": "log_monotone",
+    "median_kendall": 1.0,
+    "median_regret": 0.0,
+    "p90_regret": 0.0,
+    "maximum_regret": 0.011422323464503854,
+    "within_1pct": 0.9722222222222222,
+    "within_5pct": 1.0,
+    "exact_training": 0.8888888888888888,
+    "same_selection_as_original": 0.9444444444444444
+  },
+  {
+    "variant": "original",
+    "median_kendall": 1.0,
+    "median_regret": 0.0,
+    "p90_regret": 0.0,
+    "maximum_regret": 0.0034778710551162406,
+    "within_1pct": 1.0,
+    "within_5pct": 1.0,
+    "exact_training": 0.8888888888888888,
+    "same_selection_as_original": 1.0
+  },
+  {
+    "variant": "positive_affine",
+    "median_kendall": 1.0,
+    "median_regret": 0.0,
+    "p90_regret": 0.0,
+    "maximum_regret": 0.0034778710551162406,
+    "within_1pct": 1.0,
+    "within_5pct": 1.0,
+    "exact_training": 0.8888888888888888,
+    "same_selection_as_original": 1.0
+  },
+  {
+    "variant": "rank_fraction",
+    "median_kendall": 1.0,
+    "median_regret": 0.0,
+    "p90_regret": 0.0,
+    "maximum_regret": 0.011422323464503854,
+    "within_1pct": 0.9444444444444444,
+    "within_5pct": 1.0,
+    "exact_training": 0.9166666666666666,
+    "same_selection_as_original": 0.9166666666666666
+  },
+  {
+    "variant": "smooth_10pct_sd",
+    "median_kendall": 0.9873015873015872,
+    "median_regret": 0.0,
+    "p90_regret": 0.0,
+    "maximum_regret": 0.00878082831833419,
+    "within_1pct": 1.0,
+    "within_5pct": 1.0,
+    "exact_training": 0.8611111111111112,
+    "same_selection_as_original": 0.9444444444444444
+  },
+  {
+    "variant": "smooth_20pct_sd",
+    "median_kendall": 0.9740462266778056,
+    "median_regret": 0.0,
+    "p90_regret": 0.0,
+    "maximum_regret": 0.040493727531153045,
+    "within_1pct": 0.9722222222222222,
+    "within_5pct": 1.0,
+    "exact_training": 0.8888888888888888,
+    "same_selection_as_original": 0.9166666666666666
+  },
+  {
+    "variant": "smooth_40pct_sd",
+    "median_kendall": 0.9438039543302701,
+    "median_regret": 0.0,
+    "p90_regret": 0.0,
+    "maximum_regret": 0.04294869646711975,
+    "within_1pct": 0.9722222222222222,
+    "within_5pct": 1.0,
+    "exact_training": 0.8333333333333334,
+    "same_selection_as_original": 0.8888888888888888
+  },
+  {
+    "variant": "squared_rank",
+    "median_kendall": 1.0,
+    "median_regret": 0.0,
+    "p90_regret": 0.0,
+    "maximum_regret": 0.011422323464503854,
+    "within_1pct": 0.9722222222222222,
+    "within_5pct": 1.0,
+    "exact_training": 0.9166666666666666,
+    "same_selection_as_original": 0.9166666666666666
+  }
+]
