@@ -1,4 +1,4 @@
-﻿name: Verify repository
+name: Verify repository
 
 on:
   push:
